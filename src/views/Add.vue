@@ -1,7 +1,7 @@
 <template>
     <div>
         <form novalidate class="md-layout" @submit.prevent="validateFact">
-            <md-card class="md-layout-item md-size-50 md-small-size-100">
+            <md-card class="md-layout-item md-small-size-100">
                 <md-card-header>
                     <div class="md-title">Fact</div>
                 </md-card-header>
@@ -93,7 +93,7 @@ export default {
 
             // Instead of this timeout, here you can call your API
             window.setTimeout(() => {
-                this.lastFact = `${this.form.title} ${this.form.content}`;
+                this.lastFact = `${this.form.title}`;
                 this.factSaved = true;
                 this.sending = false;
                 this.clearForm();
