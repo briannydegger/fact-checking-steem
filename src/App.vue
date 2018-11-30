@@ -48,7 +48,9 @@
 
                     <div class="md-toolbar-section-end">
                         <md-button class="md-icon-button">
-                            <md-icon>add</md-icon>
+                            <router-link to="/add">
+                                <md-icon>add</md-icon>
+                            </router-link>
                             <md-tooltip>Add a fact</md-tooltip>
                         </md-button>
                         <md-avatar class="md-icon-button">
@@ -85,7 +87,7 @@ export default {
     max-width: 500px;
 }
 .md-drawer {
-    width: 230px;
+    width: 220px;
     max-width: calc(100vw - 125px);
 }
 </style>
