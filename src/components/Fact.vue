@@ -18,25 +18,25 @@
                 <div class="md-title">title</div>
             </router-link>
             <div class="md-subhead">
-                432 comments | {{ totalVote }} votes (&#128077; :
-                <span
-                    v-bind:class="{ highlight: positiveVote >= negativeVote && positiveVote >= nullVote }"
-                >{{ positiveVote }}</span>
-                | &#128078; :
-                <span
-                    v-bind:class="{ highlight: negativeVote > positiveVote && negativeVote >= nullVote }"
-                >{{ negativeVote }}</span> | &#128566; :
-                <span
-                    v-bind:class="{ highlight: nullVote > negativeVote && nullVote > positiveVote }"
-                >{{ nullVote }}</span>)
+                <span>432 comments | {{ totalVote }} votes </span>
+                <vote-line
+                    :positiveVote="positiveVote"
+                    :negativeVote="negativeVote"
+                    :nullVote="nullVote"
+                ></vote-line>
             </div>
         </md-card-header>
     </md-card>
 </template>
 
 <script>
+import VoteLine from "./VoteLine.vue";
+
 export default {
     name: "Fact",
+    components: {
+        VoteLine
+    },
     props: {
         id: Number,
         positiveVote: Number,
