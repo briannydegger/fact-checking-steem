@@ -50,7 +50,7 @@ export default {
             percent: (
                 (this.positiveVote / (this.positiveVote + this.negativeVote)) *
                 100
-            ).toFixed(2)
+            ).toFixed(1)
         };
     }
 };
@@ -76,16 +76,17 @@ export default {
 .md-avatar-icon {
     font-size: 8pt;
     color: black !important;
-    background-color: #ff5050 !important;
+    background-color: white !important;
+    border: 1px solid #ff5050;
 }
 
 .percent-good {
-    background-color: #50ff50 !important;
+    border: 1px solid #50ff50;
 }
 
 .notif {
     position: absolute;
-    left: 10px;
+    left: 8px;
     bottom: 15px;
     user-select: none;
     cursor: default;
