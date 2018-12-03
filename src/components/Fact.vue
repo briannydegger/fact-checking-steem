@@ -7,13 +7,29 @@
                     md-direction="bottom"
                 >{{ percent }}% of people who voted think this is true</md-tooltip>
             </md-avatar>
+            <template v-if="uncertain">
+                <span class="notif">&#9888;</span>
+                <md-tooltip md-direction="left">This fact need more details or comments !</md-tooltip>
+            </template>
         </md-card-content>
 
         <md-card-header>
-            <router-link to="/about">
+            <router-link :to="'/fact/' + id">
                 <div class="md-title">title</div>
             </router-link>
-            <div class="md-subhead">432 comments | 432 votes</div>
+            <div class="md-subhead">
+                432 comments | {{ totalVote }} votes (&#128077; :
+                <span
+                    v-bind:class="{ highlight: positiveVote >= negativeVote && positiveVote >= nullVote }"
+                >{{ positiveVote }}</span>
+                | &#128078; :
+                <span
+                    v-bind:class="{ highlight: negativeVote > positiveVote && negativeVote >= nullVote }"
+                >{{ negativeVote }}</span> | &#128566; :
+                <span
+                    v-bind:class="{ highlight: nullVote > negativeVote && nullVote > positiveVote }"
+                >{{ nullVote }}</span>)
+            </div>
         </md-card-header>
     </md-card>
 </template>
@@ -23,7 +39,19 @@ export default {
     name: "Fact",
     props: {
         id: Number,
-        percent: Number
+        positiveVote: Number,
+        negativeVote: Number,
+        nullVote: Number
+    },
+    data: function() {
+        return {
+            totalVote: this.positiveVote + this.negativeVote + this.nullVote,
+            uncertain: this.positiveVote + this.negativeVote < this.nullVote,
+            percent: (
+                (this.positiveVote / (this.positiveVote + this.negativeVote)) *
+                100
+            ).toFixed(2)
+        };
     }
 };
 </script>
@@ -46,12 +74,25 @@ export default {
 }
 
 .md-avatar-icon {
-    font-size: 12pt;
+    font-size: 8pt;
     color: black !important;
     background-color: #ff5050 !important;
 }
 
 .percent-good {
     background-color: #50ff50 !important;
+}
+
+.notif {
+    position: absolute;
+    left: 10px;
+    bottom: 15px;
+    user-select: none;
+    cursor: default;
+    font-size: 14pt;
+}
+
+.highlight {
+    text-decoration: underline;
 }
 </style>
