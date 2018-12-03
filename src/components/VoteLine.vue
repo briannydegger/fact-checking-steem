@@ -1,6 +1,6 @@
 <template>
     <span>
-        (&#128077; :
+        {{ positiveVote + negativeVote + nullVote }} votes (&#128077; :
         <span
             v-bind:class="{ voteHighlight: positiveVote >= negativeVote && positiveVote >= nullVote }"
         >{{ positiveVote }}</span> | &#128528; :

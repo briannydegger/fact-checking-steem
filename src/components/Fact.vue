@@ -18,7 +18,7 @@
                 <div class="md-title">title</div>
             </router-link>
             <div class="md-subhead">
-                <span>432 comments | {{ totalVote }} votes </span>
+                <span>432 comments |</span>
                 <vote-line
                     :positiveVote="positiveVote"
                     :negativeVote="negativeVote"
@@ -45,7 +45,6 @@ export default {
     },
     data: function() {
         return {
-            totalVote: this.positiveVote + this.negativeVote + this.nullVote,
             uncertain: this.positiveVote + this.negativeVote < this.nullVote,
             percent: (
                 (this.positiveVote / (this.positiveVote + this.negativeVote)) *
