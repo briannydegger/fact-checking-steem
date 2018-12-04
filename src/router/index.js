@@ -16,6 +16,10 @@ export default new Router({
         {
             path: "/add",
             component: () => import("@/views/Add")
+        },
+        {
+            path: "/fact/:id(\\d+)",
+            component: () => import("@/views/Fact")
         }
     ]
 });
