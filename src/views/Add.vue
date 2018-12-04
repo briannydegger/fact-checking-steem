@@ -25,13 +25,11 @@
                         </div>
                     </div>
 
-                    <md-field id="editor" :class="getValidationClass('content')">
-                        <label>Content</label>
-                        <md-textarea v-model="form.content" @input="update" :disabled="sending"></md-textarea>
-                        <span class="md-helper-text">Markdown editor</span>
-                        <span class="md-error">The content is required</span>
-                        <div v-html="compiledMarkdown"></div>
-                    </md-field>
+                    <editor
+                        v-model="form.content"
+                        :validation-class="getValidationClass('content')"
+                        :disabled="sending"
+                    />
                 </md-card-content>
 
                 <md-progress-bar md-mode="indeterminate" v-if="sending"/>
@@ -49,9 +47,13 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
+import Editor from "../components/Editor";
 
 export default {
     name: "FormValidation",
+    components: {
+        Editor
+    },
     mixins: [validationMixin],
     data: () => ({
         form: {
@@ -105,16 +107,6 @@ export default {
             if (!this.$v.$invalid) {
                 this.saveFact();
             }
-        },
-        // Markdown
-        update: _.debounce(function(e) {
-            this.form.content = e;
-        }, 300)
-    },
-    // Markdown
-    computed: {
-        compiledMarkdown: function() {
-            return marked(this.form.content, { sanitize: true });
         }
     }
 };
@@ -126,48 +118,5 @@ export default {
     top: 0;
     right: 0;
     left: 0;
-}
-
-// Markdown
-#editor {
-    height: 300px;
-}
-
-#editor div {
-    word-wrap: break-word;
-}
-
-.md-textarea,
-#editor div {
-    display: inline-block;
-    width: 49%;
-    height: 100%;
-    max-height: none;
-    vertical-align: top;
-    box-sizing: border-box;
-    padding: 0 20px;
-}
-
-.md-textarea {
-    border: none;
-    resize: none !important;
-    outline: none !important;
-    font-size: 14px !important;
-    padding: 0px 20px 20px 0px !important;
-    margin-top: 20px;
-    margin-left: 20px;
-    height: calc(100% - 20px);
-}
-
-#editor div {
-    border-left: 1px solid #ccc;
-    margin-top: -16px !important;
-    padding-top: 16px !important;
-    height: 300px;
-    overflow: auto;
-}
-
-code {
-    color: #f66;
 }
 </style>
