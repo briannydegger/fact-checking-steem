@@ -33,7 +33,7 @@
             </md-card-area>
 
             <md-card-content>
-                <h3 class="md-subheading">Comments</h3>
+                <h3 class="md-subheading">Comments (testimonials and evidence)</h3>
                 <div id="reply-content">
                     <md-button v-if="!reply" v-on:click="reply = true" class="md-raised">
                         <md-icon>edit</md-icon>Reply
@@ -61,14 +61,17 @@
                 </div>
 
                 <comment
-                    pseudo="Pseudo"
-                    avatar="https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg"
-                    date="01-01-2018"
-                    :money="32"
-                    :positiveVote="321"
-                    :negativeVote="321"
-                    :nullVote="3"
-                    :opinion="true"
+                    v-for="comment in comments"
+                    v-bind:key="comment.id"
+                    :pseudo="comment.pseudo"
+                    :avatar="comment.avatar"
+                    :date="comment.date"
+                    :money="comment.money"
+                    :positiveVote="comment.positiveVote"
+                    :negativeVote="comment.negativeVote"
+                    :nullVote="comment.nullVote"
+                    :opinion="comment.opinion"
+                    :replies="comment.replies"
                 />
             </md-card-content>
         </md-card>
@@ -101,7 +104,63 @@ export default {
             contentComment: ""
         },
         commentSaved: false,
-        sending: false
+        sending: false,
+        comments: [
+            {
+                id: 1,
+                pseudo: "Pseudo",
+                avatar:
+                    "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
+                date: "01-01-2018",
+                money: 32,
+                positiveVote: 321,
+                negativeVote: 321,
+                nullVote: 3,
+                opinion: 1,
+                replies: [
+                    {
+                        id: 1,
+                        pseudo: "Pseudo",
+                        avatar:
+                            "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
+                        date: "01-01-2018",
+                        money: 32,
+                        positiveVote: 321,
+                        negativeVote: 321,
+                        nullVote: 3,
+                        opinion: -1,
+                        replies: [
+                            {
+                                id: 1,
+                                pseudo: "Pseudo",
+                                avatar:
+                                    "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
+                                date: "01-01-2018",
+                                money: 32,
+                                positiveVote: 321,
+                                negativeVote: 321,
+                                nullVote: 3,
+                                opinion: 2,
+                                replies: []
+                            }
+                        ]
+                    },
+                    {
+                        id: 1,
+                        pseudo: "Pseudo",
+                        avatar:
+                            "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
+                        date: "01-01-2018",
+                        money: 32,
+                        positiveVote: 321,
+                        negativeVote: 321,
+                        nullVote: 3,
+                        opinion: 0,
+                        replies: []
+                    }
+                ]
+            }
+        ]
     }),
     validations: {
         form: {

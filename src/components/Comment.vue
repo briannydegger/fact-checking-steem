@@ -24,7 +24,7 @@
                 <a href="https://steemit.com/@partiko-android">Partiko Android</a>
             </p>
         </div>
-        <div class="comment-line">
+        <span class="comment-line comment-votes-line">
             <md-icon>monetization_on</md-icon>
             <span class="span-padding-right">{{ money }}</span>
             <span class="span-padding-right">|</span>
@@ -42,7 +42,7 @@
             <md-button v-on:click="reply = true" class="md-raised">
                 <md-icon>edit</md-icon>Reply
             </md-button>
-        </div>
+        </span>
         <div v-if="reply">
             <form novalidate @submit.prevent="validateComment">
                 <editor
@@ -58,6 +58,20 @@
                 <md-button type="submit" class="md-primary md-raised" :disabled="sending">Send</md-button>
                 <md-button v-on:click="reply = false" class="md-raised">Cancel</md-button>
             </form>
+        </div>
+        <div class="replies">
+            <comment
+                v-for="comment in replies"
+                :pseudo="comment.pseudo"
+                :avatar="comment.avatar"
+                :date="comment.date"
+                :money="comment.money"
+                :positiveVote="comment.positiveVote"
+                :negativeVote="comment.negativeVote"
+                :nullVote="comment.nullVote"
+                :opinion="comment.opinion"
+                :replies="comment.replies"
+            />
         </div>
     </div>
 </template>
@@ -93,7 +107,8 @@ export default {
         positiveVote: Number,
         negativeVote: Number,
         nullVote: Number,
-        opinion: Boolean
+        opinion: Number,
+        replies: Array
     },
     validations: {
         form: {
@@ -136,7 +151,7 @@ export default {
 
 <style lang="scss">
 .comment {
-    margin-top: 5px;
+    margin-top: 20px;
     min-height: 40px;
 }
 
@@ -157,12 +172,17 @@ export default {
     padding-right: 10px;
 }
 
-.comment-line:last-child {
+.comment-votes-line {
+    white-space: nowrap;
     height: 36px;
     line-height: 36px;
 }
 
 .comment-line .md-button {
     margin-top: 0px;
+}
+
+.replies {
+    padding-left: 50px;
 }
 </style>
