@@ -11,7 +11,9 @@
                 </strong>
             </span>
             <md-icon>access_time</md-icon>
-            <span>{{ date }}</span>
+            <span class="span-padding-right">{{ date }}</span>
+            <span class="span-padding-right">|</span>
+            <span>Opinion : {{ opinionChar(opinion) }}</span>
         </div>
         <div class="comment-line">
             <p>
@@ -62,6 +64,7 @@
         <div class="replies">
             <comment
                 v-for="comment in replies"
+                v-bind:key="comment.id"
                 :pseudo="comment.pseudo"
                 :avatar="comment.avatar"
                 :date="comment.date"
@@ -97,7 +100,23 @@ export default {
             contentComment: ""
         },
         commentSaved: false,
-        sending: false
+        sending: false,
+        opinionChar: opinion => {
+            switch (opinion) {
+                case 0: {
+                    return "👎";
+                }
+                case 1: {
+                    return "👍";
+                }
+                case 2: {
+                    return "😐";
+                }
+                default: {
+                    return "-";
+                }
+            }
+        }
     }),
     props: {
         pseudo: String,
