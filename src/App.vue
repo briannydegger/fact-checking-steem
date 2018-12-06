@@ -53,14 +53,19 @@
                             </router-link>
                             <md-tooltip>Add a fact</md-tooltip>
                         </md-button>
-                        <md-avatar class="md-icon-button">
-                            <img
-                                src="https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg"
-                                alt="Avatar"
-                            >
-                            <md-tooltip>Brian</md-tooltip>
-                        </md-avatar>
-                        <md-button class="md-raised">Login</md-button>
+                        <template v-if="access_token">
+                            <md-avatar class="md-icon-button">
+                                <img
+                                    src="https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg"
+                                    alt="Avatar"
+                                >
+                                <md-tooltip>{{ username }}</md-tooltip>
+                            </md-avatar>
+                            <md-button v-on:click="logOut()" class="md-raised">Logout</md-button>
+                        </template>
+                        <a :href="link" v-else>
+                            <md-button class="md-raised">Login</md-button>
+                        </a>
                     </div>
                 </div>
             </md-app-toolbar>
@@ -73,12 +78,57 @@
 </template>
 
 <script>
+import sc2 from "steemconnect";
+
 export default {
     name: "App",
-    data: () => ({
-        selectedSuggestion: null,
-        suggestion: []
-    })
+    data: () => {
+        // init steemconnect
+        let api = sc2.Initialize({
+            app: "fact-checking",
+            callbackURL: "http://localhost:8080",
+            accessToken: "access_token",
+            scope: ["vote", "comment"]
+        });
+        let access_token = new URLSearchParams(document.location.search).get(
+            "access_token"
+        );
+
+        if (access_token) {
+            api.setAccessToken(access_token);
+        }
+
+        return {
+            selectedSuggestion: null,
+            suggestion: [],
+            api: api,
+            link: api.getLoginURL(),
+            access_token: access_token,
+            username: new URLSearchParams(document.location.search).get(
+                "username"
+            )
+        };
+    },
+    methods: {
+        logOut: function() {
+            var that = this;
+            this.api.revokeToken(function(err, res) {
+                if (res && res.success) {
+                    that.access_token = null;
+                    document.location.href = "/";
+                }
+            });
+            return false;
+        },
+        getUserDetails: function() {
+            this.api.me(function(err, res) {
+                if (res) {
+                    const user = JSON.stringify(res, undefined, 2);
+                    //document.getElementById("userDetailsJSON").innerHTML = user;
+                }
+            });
+        }
+    }
 };
 </script>
 

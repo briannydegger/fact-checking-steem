@@ -119,7 +119,7 @@ export default {
                 opinion: 1,
                 replies: [
                     {
-                        id: 1,
+                        id: 2,
                         pseudo: "Pseudo",
                         avatar:
                             "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
@@ -131,7 +131,7 @@ export default {
                         opinion: -1,
                         replies: [
                             {
-                                id: 1,
+                                id: 3,
                                 pseudo: "Pseudo",
                                 avatar:
                                     "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
@@ -146,7 +146,7 @@ export default {
                         ]
                     },
                     {
-                        id: 1,
+                        id: 4,
                         pseudo: "Pseudo",
                         avatar:
                             "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
