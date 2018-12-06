@@ -2,13 +2,13 @@
     <span>
         {{ positiveVote + negativeVote + nullVote }} votes (&#128077; :
         <span
-            v-bind:class="{ voteHighlight: positiveVote >= negativeVote && positiveVote >= nullVote }"
+            v-bind:class="{ 'vote-highlight': positiveVote >= negativeVote && positiveVote >= nullVote }"
         >{{ positiveVote }}</span> | &#128528; :
         <span
-            v-bind:class="{ voteHighlight: nullVote > negativeVote && nullVote > positiveVote }"
+            v-bind:class="{ 'vote-highlight': nullVote > negativeVote && nullVote > positiveVote }"
         >{{ nullVote }}</span> | &#128078; :
         <span
-            v-bind:class="{ voteHighlight: negativeVote > positiveVote && negativeVote >= nullVote }"
+            v-bind:class="{ 'vote-highlight': negativeVote > positiveVote && negativeVote >= nullVote }"
         >{{ negativeVote }}</span>)
     </span>
 </template>
