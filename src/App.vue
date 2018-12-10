@@ -55,10 +55,8 @@
                         </md-button>
                         <template v-if="access_token">
                             <md-avatar class="md-icon-button">
-                                <img
-                                    src="https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg"
-                                    alt="Avatar"
-                                >
+                                <img v-if="profile_image" :src="profile_image" alt="Avatar">
+                                <md-icon v-else>person</md-icon>
                                 <md-tooltip>{{ username }}</md-tooltip>
                             </md-avatar>
                             <md-button v-on:click="logOut()" class="md-raised">Logout</md-button>
@@ -106,7 +104,8 @@ export default {
             access_token: access_token,
             username: new URLSearchParams(document.location.search).get(
                 "username"
-            )
+            ),
+            profile_image: ""
         };
     },
     methods: {
@@ -119,12 +118,18 @@ export default {
                 }
             });
             return false;
-        },
-        getUserDetails: function() {
-            this.api.me(function(err, res) {
-                if (res) {
-                    const user = JSON.stringify(res, undefined, 2);
-                    //document.getElementById("userDetailsJSON").innerHTML = user;
+        }
+    },
+    mounted: function() {
+        if (this.access_token) {
+            let that = this;
+            this.api.me(function(err, result) {
+                if (!err) {
+                    let json_metadata = JSON.parse(
+                        result.account.json_metadata
+                    );
+                    that.username = json_metadata.profile.name;
+                    that.profile_image = json_metadata.profile.profile_image;
                 }
             });
         }
