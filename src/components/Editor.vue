@@ -9,6 +9,9 @@
 </template>
 
 <script>
+import _ from "lodash";
+import marked from "marked";
+
 export default {
     name: "Editor",
     components: {},
