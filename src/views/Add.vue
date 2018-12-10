@@ -54,6 +54,9 @@ export default {
     components: {
         Editor
     },
+    props: {
+        accessToken: String
+    },
     mixins: [validationMixin],
     data: () => ({
         form: {
@@ -107,6 +110,11 @@ export default {
             if (!this.$v.$invalid) {
                 this.saveFact();
             }
+        }
+    },
+    mounted: function() {
+        if (!this.accessToken) {
+            this.$router.push("/");
         }
     }
 };

@@ -46,22 +46,22 @@
                         </md-autocomplete>
                     </form>
 
-                    <div class="md-toolbar-section-end">
+                    <div v-if="access_token" class="md-toolbar-section-end">
                         <md-button class="md-icon-button">
                             <router-link to="/add">
                                 <md-icon>add</md-icon>
                             </router-link>
                             <md-tooltip>Add a fact</md-tooltip>
                         </md-button>
-                        <template v-if="access_token">
-                            <md-avatar class="md-icon-button">
-                                <img v-if="profile_image" :src="profile_image" alt="Avatar">
-                                <md-icon v-else>person</md-icon>
-                                <md-tooltip>{{ username }}</md-tooltip>
-                            </md-avatar>
-                            <md-button v-on:click="logOut()" class="md-raised">Logout</md-button>
-                        </template>
-                        <a :href="link" v-else>
+                        <md-avatar class="md-icon-button">
+                            <img v-if="profile_image" :src="profile_image" alt="Avatar">
+                            <md-icon v-else>person</md-icon>
+                            <md-tooltip>{{ username }}</md-tooltip>
+                        </md-avatar>
+                        <md-button v-on:click="logOut()" class="md-raised">Logout</md-button>
+                    </div>
+                    <div v-else class="md-toolbar-section-end">
+                        <a :href="link">
                             <md-button class="md-raised">Login</md-button>
                         </a>
                     </div>
@@ -69,7 +69,7 @@
             </md-app-toolbar>
 
             <md-app-content>
-                <router-view></router-view>
+                <router-view :access-token="access_token"></router-view>
             </md-app-content>
         </md-app>
     </div>
