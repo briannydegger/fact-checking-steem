@@ -58,7 +58,10 @@
                             <md-icon v-else>person</md-icon>
                             <md-tooltip>{{ username }}</md-tooltip>
                         </md-avatar>
-                        <md-button v-on:click="logOut()" class="md-raised">Logout</md-button>
+                        <md-button v-on:click="logOut()" class="md-raised">
+                            <span>Logout</span>
+                            <md-progress-bar md-mode="indeterminate" v-if="waitingLogout"></md-progress-bar>
+                        </md-button>
                     </div>
                     <div v-else class="md-toolbar-section-end">
                         <a :href="link">
@@ -67,7 +70,6 @@
                     </div>
                 </div>
             </md-app-toolbar>
-
             <md-app-content>
                 <router-view :access-token="access_token"></router-view>
             </md-app-content>
@@ -105,11 +107,13 @@ export default {
             username: new URLSearchParams(document.location.search).get(
                 "username"
             ),
-            profile_image: ""
+            profile_image: "",
+            waitingLogout: false
         };
     },
     methods: {
         logOut: function() {
+            this.waitingLogout = true;
             var that = this;
             this.api.revokeToken(function(err, res) {
                 if (res && res.success) {
