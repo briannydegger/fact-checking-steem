@@ -1,40 +1,49 @@
 <template>
     <div>
-        <fact :id="100" :positive-vote="100" :negative-vote="200" :null-vote="100"></fact>
-        <fact :id="0" :positive-vote="100" :negative-vote="100" :null-vote="100"></fact>
-        <fact :id="1" :positive-vote="0" :negative-vote="100" :null-vote="0"></fact>
-        <fact :id="2" :positive-vote="100" :negative-vote="100" :null-vote="0"></fact>
-        <fact :id="3" :positive-vote="0" :negative-vote="100" :null-vote="100"></fact>
-        <fact :id="4" :positive-vote="100" :negative-vote="0" :null-vote="100"></fact>
-        <fact :id="5" :positive-vote="1000" :negative-vote="1000" :null-vote="100"></fact>
-        <fact :id="6" :positive-vote="100" :negative-vote="100" :null-vote="1000"></fact>
-        <fact :id="7" :positive-vote="100" :negative-vote="55555" :null-vote="1000"></fact>
-        <fact :id="8" :positive-vote="100" :negative-vote="120" :null-vote="200"></fact>
-        <fact :id="0" :positive-vote="100" :negative-vote="100" :null-vote="100"></fact>
-        <fact :id="0" :positive-vote="1" :negative-vote="1000" :null-vote="100"></fact>
-        <fact :id="0" :positive-vote="100" :negative-vote="100" :null-vote="100"></fact>
-        <fact :id="0" :positive-vote="100" :negative-vote="100" :null-vote="100"></fact>
-        <fact :id="0" :positive-vote="100" :negative-vote="5" :null-vote="100"></fact>
-        <fact :id="0" :positive-vote="100" :negative-vote="100" :null-vote="100"></fact>
-        <fact :id="0" :positive-vote="100" :negative-vote="100" :null-vote="100"></fact>
-        <fact :id="0" :positive-vote="100" :negative-vote="100" :null-vote="100"></fact>
-        <fact :id="0" :positive-vote="100" :negative-vote="100" :null-vote="100"></fact>
-        <fact :id="0" :positive-vote="100" :negative-vote="100" :null-vote="201"></fact>
-        <fact :id="0" :positive-vote="100" :negative-vote="100" :null-vote="201"></fact>
-        <fact :id="0" :positive-vote="100" :negative-vote="100" :null-vote="201"></fact>
-        <fact :id="0" :positive-vote="100" :negative-vote="100" :null-vote="201"></fact>
-        <fact :id="0" :positive-vote="100" :negative-vote="100" :null-vote="201"></fact>
-        <fact :id="0" :positive-vote="100" :negative-vote="100" :null-vote="201"></fact>
+        <md-progress-bar md-mode="indeterminate" v-if="recuperating"></md-progress-bar>
+        <fact
+            v-for="post in posts"
+            v-bind:key="post.id"
+            :title="post.title"
+            :active_votes="post.active_votes"
+            :body="post.body"
+            :number_comments="post.children"
+            :author="post.author"
+            :permlink="post.permlink"
+        />
     </div>
 </template>
 
 <script>
 import Fact from "../components/Fact.vue";
+const dsteem = require("dsteem");
 
 export default {
     name: "home",
     components: {
         Fact
+    },
+    data: () => ({
+        posts: [],
+        recuperating: false
+    }),
+    mounted: function() {
+        this.recuperating = true;
+        const client = new dsteem.Client("https://api.steemit.com");
+        client.database
+            .getDiscussions("hot", {
+                tag: "life",
+                limit: 5
+            })
+            .then(result => {
+                if (result) {
+                    this.posts = result;
+                }
+                this.recuperating = false;
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 };
 </script>

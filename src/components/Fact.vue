@@ -1,5 +1,5 @@
 <template>
-    <md-card class="fact-cart">
+    <md-card class="fact-card">
         <md-card-content class="percent">
             <md-avatar class="md-avatar-icon" v-bind:class="{ 'percent-good': percent > 49 }">
                 {{ percent }}%
@@ -14,16 +14,16 @@
         </md-card-content>
 
         <md-card-header>
-            <router-link :to="'/fact/' + id">
-                <div class="md-title">title</div>
+            <router-link :to="'/fact/' + this.$vnode.key">
+                <div class="md-title">{{ title }}</div>
             </router-link>
             <div class="md-subhead">
-                <span>432 comments |</span>
                 <vote-line
                     :positiveVote="positiveVote"
                     :negativeVote="negativeVote"
                     :nullVote="nullVote"
                 ></vote-line>
+                <span>| {{ number_comments }} comments</span>
             </div>
         </md-card-header>
     </md-card>
@@ -38,16 +38,35 @@ export default {
         VoteLine
     },
     props: {
-        id: Number,
-        positiveVote: Number,
-        negativeVote: Number,
-        nullVote: Number
+        title: String,
+        active_votes: Array,
+        body: String,
+        number_comments: Number,
+        author: String,
+        permlink: String
     },
     data: function() {
+        let positiveVote = 0;
+        let negativeVote = 0;
+        let nullVote = 0;
+
+        this.active_votes.forEach(vote => {
+            if (vote.percent < 0) {
+                negativeVote++;
+            } else if (vote.percent < 100) {
+                nullVote++;
+            } else {
+                positiveVote++;
+            }
+        });
+
         return {
-            uncertain: this.positiveVote + this.negativeVote < this.nullVote,
+            positiveVote: positiveVote,
+            negativeVote: negativeVote,
+            nullVote: nullVote,
+            uncertain: positiveVote + negativeVote < nullVote,
             percent: (
-                (this.positiveVote / (this.positiveVote + this.negativeVote)) *
+                (positiveVote / (positiveVote + negativeVote)) *
                 100
             ).toFixed(1)
         };
@@ -56,7 +75,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.fact-cart {
+.fact-card {
     width: calc(100% - 20px);
     margin: 4px;
     height: 85px;
@@ -94,5 +113,10 @@ export default {
 
 .highlight {
     text-decoration: underline;
+}
+
+.fact-card .md-title {
+    font-size: 20pt;
+    white-space: nowrap;
 }
 </style>
