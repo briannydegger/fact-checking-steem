@@ -34,11 +34,7 @@
             <voting-line></voting-line>
             <span class="span-padding-right"></span>
             <span class="span-padding-right">|</span>
-            <vote-line
-                :positiveVote="positiveVote"
-                :negativeVote="negativeVote"
-                :nullVote="nullVote"
-            ></vote-line>
+            <vote-line :votes="votes"></vote-line>
             <span class="span-padding-right"></span>
             <span class="span-padding-right">|</span>
             <md-button v-on:click="reply = true" class="md-raised">
@@ -69,9 +65,7 @@
                 :avatar="comment.avatar"
                 :date="comment.date"
                 :money="comment.money"
-                :positiveVote="comment.positiveVote"
-                :negativeVote="comment.negativeVote"
-                :nullVote="comment.nullVote"
+                :votes="comment.votes"
                 :opinion="comment.opinion"
                 :replies="comment.replies"
             />
@@ -123,9 +117,7 @@ export default {
         avatar: String,
         date: String,
         money: Number,
-        positiveVote: Number,
-        negativeVote: Number,
-        nullVote: Number,
+        votes: Object,
         opinion: Number,
         replies: Array
     },

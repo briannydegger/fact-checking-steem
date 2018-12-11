@@ -23,11 +23,7 @@
                 <md-card-content>
                     <div class="votes-line">
                         <voting-line></voting-line>
-                        <vote-line
-                            :positiveVote="positiveVote"
-                            :negativeVote="negativeVote"
-                            :nullVote="nullVote"
-                        ></vote-line>
+                        <vote-line :votes="votes"></vote-line>
                     </div>
                 </md-card-content>
             </md-card-area>
@@ -67,9 +63,7 @@
                     :avatar="comment.avatar"
                     :date="comment.date"
                     :money="comment.money"
-                    :positiveVote="comment.positiveVote"
-                    :negativeVote="comment.negativeVote"
-                    :nullVote="comment.nullVote"
+                    :votes="comment.votes"
                     :opinion="comment.opinion"
                     :replies="comment.replies"
                 />
@@ -95,73 +89,65 @@ export default {
         VotingLine,
         Editor
     },
-    data: () => ({
-        reply: false,
-        positiveVote: 321,
-        negativeVote: 123,
-        nullVote: 123123,
-        form: {
-            contentComment: ""
-        },
-        commentSaved: false,
-        sending: false,
-        comments: [
-            {
-                id: 1,
-                pseudo: "Pseudo",
-                avatar:
-                    "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
-                date: "01-01-2018",
-                money: 32,
-                positiveVote: 321,
-                negativeVote: 321,
-                nullVote: 3,
-                opinion: 1,
-                replies: [
-                    {
-                        id: 2,
-                        pseudo: "Pseudo",
-                        avatar:
-                            "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
-                        date: "01-01-2018",
-                        money: 32,
-                        positiveVote: 321,
-                        negativeVote: 321,
-                        nullVote: 3,
-                        opinion: -1,
-                        replies: [
-                            {
-                                id: 3,
-                                pseudo: "Pseudo",
-                                avatar:
-                                    "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
-                                date: "01-01-2018",
-                                money: 32,
-                                positiveVote: 321,
-                                negativeVote: 321,
-                                nullVote: 3,
-                                opinion: 2,
-                                replies: []
-                            }
-                        ]
-                    },
-                    {
-                        id: 4,
-                        pseudo: "Pseudo",
-                        avatar:
-                            "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
-                        date: "01-01-2018",
-                        money: 32,
-                        positiveVote: 321,
-                        negativeVote: 321,
-                        nullVote: 3,
-                        opinion: 0,
-                        replies: []
-                    }
-                ]
-            }
-        ]
-    }),
+    data: function() {
+        return {
+            reply: false,
+            votes: this.$votesInit,
+            form: {
+                contentComment: ""
+            },
+            commentSaved: false,
+            sending: false,
+            comments: [
+                {
+                    id: 1,
+                    pseudo: "Pseudo",
+                    avatar:
+                        "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
+                    date: "01-01-2018",
+                    money: 32,
+                    votes: this.$votesInit,
+                    opinion: 1,
+                    replies: [
+                        {
+                            id: 2,
+                            pseudo: "Pseudo",
+                            avatar:
+                                "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
+                            date: "01-01-2018",
+                            money: 32,
+                            votes: this.$votesInit,
+                            opinion: -1,
+                            replies: [
+                                {
+                                    id: 3,
+                                    pseudo: "Pseudo",
+                                    avatar:
+                                        "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
+                                    date: "01-01-2018",
+                                    money: 32,
+                                    votes: this.$votesInit,
+                                    opinion: 2,
+                                    replies: []
+                                }
+                            ]
+                        },
+                        {
+                            id: 4,
+                            pseudo: "Pseudo",
+                            avatar:
+                                "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
+                            date: "01-01-2018",
+                            money: 32,
+                            votes: this.$votesInit,
+                            opinion: 0,
+                            replies: []
+                        }
+                    ]
+                }
+            ]
+        };
+    },
     validations: {
         form: {
             contentComment: {

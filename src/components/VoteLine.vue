@@ -1,15 +1,15 @@
 <template>
     <span>
-        {{ positiveVote + negativeVote + nullVote }} votes (&#128077; :
+        {{ votes.positiveVote + votes.negativeVote + votes.nullVote }} votes (&#128077; :
         <span
-            v-bind:class="{ 'vote-highlight': positiveVote >= negativeVote && positiveVote >= nullVote }"
-        >{{ positiveVote }}</span> | &#128528; :
+            v-bind:class="{ 'vote-highlight': votes.positiveVote >= votes.negativeVote && votes.positiveVote >= votes.nullVote }"
+        >{{ votes.positiveVote }}</span> | &#128528; :
         <span
-            v-bind:class="{ 'vote-highlight': nullVote > negativeVote && nullVote > positiveVote }"
-        >{{ nullVote }}</span> | &#128078; :
+            v-bind:class="{ 'vote-highlight': votes.nullVote > votes.negativeVote && votes.nullVote > votes.positiveVote }"
+        >{{ votes.nullVote }}</span> | &#128078; :
         <span
-            v-bind:class="{ 'vote-highlight': negativeVote > positiveVote && negativeVote >= nullVote }"
-        >{{ negativeVote }}</span>)
+            v-bind:class="{ 'vote-highlight': votes.negativeVote > votes.positiveVote && votes.negativeVote >= votes.nullVote }"
+        >{{ votes.negativeVote }}</span>)
     </span>
 </template>
 
@@ -17,9 +17,7 @@
 export default {
     name: "VoteLine",
     props: {
-        positiveVote: Number,
-        negativeVote: Number,
-        nullVote: Number
+        votes: Object
     }
 };
 </script>

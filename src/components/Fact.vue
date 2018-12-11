@@ -1,13 +1,13 @@
 <template>
     <md-card class="fact-card">
         <md-card-content class="percent">
-            <md-avatar class="md-avatar-icon" v-bind:class="{ 'percent-good': percent > 49 }">
-                {{ percent }}%
+            <md-avatar class="md-avatar-icon" v-bind:class="{ 'percent-good': votes.percent > 49 }">
+                {{ votes.percent }}%
                 <md-tooltip
                     md-direction="bottom"
-                >{{ percent }}% of people who voted think this is true</md-tooltip>
+                >{{ votes.percent }}% of people who voted think this is true</md-tooltip>
             </md-avatar>
-            <template v-if="uncertain">
+            <template v-if="votes.uncertain">
                 <span class="notif">&#9888;</span>
                 <md-tooltip md-direction="left">This fact need more details or comments !</md-tooltip>
             </template>
@@ -18,11 +18,7 @@
                 <div class="md-title">{{ title }}</div>
             </router-link>
             <div class="md-subhead">
-                <vote-line
-                    :positiveVote="positiveVote"
-                    :negativeVote="negativeVote"
-                    :nullVote="nullVote"
-                ></vote-line>
+                <vote-line :votes="votes"></vote-line>
                 <span>| {{ number_comments }} comments</span>
             </div>
         </md-card-header>
@@ -46,29 +42,8 @@ export default {
         permlink: String
     },
     data: function() {
-        let positiveVote = 0;
-        let negativeVote = 0;
-        let nullVote = 0;
-
-        this.active_votes.forEach(vote => {
-            if (vote.percent < 0) {
-                negativeVote++;
-            } else if (vote.percent < 100) {
-                nullVote++;
-            } else {
-                positiveVote++;
-            }
-        });
-
         return {
-            positiveVote: positiveVote,
-            negativeVote: negativeVote,
-            nullVote: nullVote,
-            uncertain: positiveVote + negativeVote < nullVote,
-            percent: (
-                (positiveVote / (positiveVote + negativeVote)) *
-                100
-            ).toFixed(1)
+            votes: this.$activeVotesToVotes(this.active_votes)
         };
     }
 };
