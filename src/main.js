@@ -6,6 +6,8 @@ import VueRouter from 'vue-router';
 import 'vue-material/dist/vue-material.min.css';
 import 'vue-material/dist/theme/default.css';
 import 'babel-polyfill';
+const dsteem = require("dsteem");
+import Remarkable from "remarkable";
 
 Vue.config.productionTip = false;
 
@@ -44,6 +46,11 @@ Vue.prototype.$activeVotesToVotes = (active_votes) => {
     ).toFixed(1);
     return votes;
 };
+Vue.prototype.$dsteemClient = new dsteem.Client("https://api.steemit.com");
+Vue.prototype.$md = new Remarkable({
+    html: true,
+    linkify: true
+});
 
 new Vue({
     router,

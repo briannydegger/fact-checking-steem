@@ -23,7 +23,7 @@ export default new Router({
             component: () => import("@/views/Add")
         },
         {
-            path: "/fact/:id(\\d+)",
+            path: "/fact/:author/:permlink",
             component: () => import("@/views/Fact")
         }
     ]

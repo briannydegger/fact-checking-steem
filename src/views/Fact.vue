@@ -3,20 +3,22 @@
         <md-card class="md-layout-item md-small-size-100">
             <md-card-area md-inset>
                 <md-card-header>
-                    <div class="md-title">Fact title {{ $route.params.id }}</div>
+                    <div class="md-title">{{ title }}</div>
                     <div class="md-subhead">
                         <md-icon>account_circle</md-icon>
                         <span>
                             <strong>
-                                <a href="https://steemit.com/@irtiss">Irtiss</a>
+                                <a
+                                    :href="'https://steemit.com/@' + $route.params.author"
+                                >{{ $route.params.author }}</a>
                             </strong>
                         </span>
                         <md-icon>access_time</md-icon>
-                        <span>5:30PM</span>
+                        <span>{{ created }}</span>
                     </div>
                 </md-card-header>
 
-                <md-card-content>content.</md-card-content>
+                <md-card-content v-html="content"></md-card-content>
             </md-card-area>
 
             <md-card-area md-inset>
@@ -55,17 +57,17 @@
                         </form>
                     </div>
                 </div>
-
                 <comment
                     v-for="comment in comments"
                     v-bind:key="comment.id"
-                    :pseudo="comment.pseudo"
-                    :avatar="comment.avatar"
-                    :date="comment.date"
-                    :money="comment.money"
-                    :votes="comment.votes"
-                    :opinion="comment.opinion"
+                    :pseudo="comment.author"
+                    avatar
+                    :date="comment.created"
+                    :money="comment.total_payout_value"
+                    :active_votes="comment.active_votes"
+                    :opinion="-1"
                     :replies="comment.replies"
+                    :body="comment.body"
                 />
             </md-card-content>
         </md-card>
@@ -79,6 +81,7 @@ import VotingLine from "../components/VotingLine";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 import Editor from "../components/Editor";
+import Promise from "bluebird";
 
 export default {
     name: "fact",
@@ -93,59 +96,15 @@ export default {
         return {
             reply: false,
             votes: this.$votesInit,
+            title: "",
+            created: "",
+            content: "",
             form: {
                 contentComment: ""
             },
             commentSaved: false,
             sending: false,
-            comments: [
-                {
-                    id: 1,
-                    pseudo: "Pseudo",
-                    avatar:
-                        "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
-                    date: "01-01-2018",
-                    money: 32,
-                    votes: this.$votesInit,
-                    opinion: 1,
-                    replies: [
-                        {
-                            id: 2,
-                            pseudo: "Pseudo",
-                            avatar:
-                                "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
-                            date: "01-01-2018",
-                            money: 32,
-                            votes: this.$votesInit,
-                            opinion: -1,
-                            replies: [
-                                {
-                                    id: 3,
-                                    pseudo: "Pseudo",
-                                    avatar:
-                                        "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
-                                    date: "01-01-2018",
-                                    money: 32,
-                                    votes: this.$votesInit,
-                                    opinion: 2,
-                                    replies: []
-                                }
-                            ]
-                        },
-                        {
-                            id: 4,
-                            pseudo: "Pseudo",
-                            avatar:
-                                "https://cdn.steemitimages.com/DQmSo5MRG365Q7avQTh14iUi8dbVp7ijfNiB2h88Rvzjrsy/10945712_1068431826500333_6455748346366888116_n.jpg",
-                            date: "01-01-2018",
-                            money: 32,
-                            votes: this.$votesInit,
-                            opinion: 0,
-                            replies: []
-                        }
-                    ]
-                }
-            ]
+            comments: []
         };
     },
     validations: {
@@ -183,6 +142,84 @@ export default {
                 this.saveComment();
             }
         }
+    },
+    mounted: function() {
+        let that = this;
+        let fetchReplies = function(author, permlink) {
+            return that.$dsteemClient.database
+                .call("get_content_replies", [author, permlink])
+                .then(replies => {
+                    return Promise.map(replies, function(r) {
+                        if (r.children > 0) {
+                            return fetchReplies(r.author, r.permlink).then(
+                                function(children) {
+                                    r.replies = children;
+                                    return r;
+                                }
+                            );
+                        } else {
+                            return r;
+                        }
+                    });
+                });
+        };
+
+        let fetchInfos = function(
+            comments,
+            condenser_api_function,
+            keyComment,
+            keyResult
+        ) {
+            Promise.map(comments, function(comment) {
+                that.$dsteemClient.database
+                    .call(condenser_api_function, [
+                        comment.author,
+                        comment.permlink
+                    ])
+                    .then(result => {
+                        if (keyResult) comment[keyComment] = result[keyResult];
+                        else comment[keyComment] = result;
+                        if (comment.replies.length > 0) {
+                            fetchInfos(
+                                comment.replies,
+                                condenser_api_function,
+                                keyComment,
+                                keyResult
+                            );
+                        }
+                    });
+            });
+        };
+
+        this.$dsteemClient.database
+            .call("get_content", [
+                this.$route.params.author,
+                this.$route.params.permlink
+            ])
+            .then(result => {
+                this.content = this.$md.render(result.body);
+                this.title = result.title;
+                this.created = result.created;
+                this.votes = this.$activeVotesToVotes(result.active_votes);
+                fetchReplies(
+                    this.$route.params.author,
+                    this.$route.params.permlink
+                ).then(function(comments) {
+                    that.comments = comments;
+
+                    fetchInfos(
+                        that.comments,
+                        "get_active_votes",
+                        "active_votes"
+                    );
+                    fetchInfos(
+                        that.comments,
+                        "get_content",
+                        "total_payout_value",
+                        "total_payout_value"
+                    );
+                });
+            });
     }
 };
 </script>

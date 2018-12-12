@@ -15,17 +15,7 @@
             <span class="span-padding-right">|</span>
             <span>Opinion : {{ opinionChar(opinion) }}</span>
         </div>
-        <div class="comment-line">
-            <p>
-                <a href="/@berniesanders">@berniesanders</a> - Can you elaborate on that? Who are the criminals and scammers? For me, it seems like Whaleshares was created due to there being a disagreement between their devs and steemit devs like a hard fork?
-            </p>
-            <p>There are no bots on the platform which is good but I don't think the issue of manipulating the trending feed will ever go away - seen people with 3 upvotes make it to the top of the feed and this "summon a whale" thing doesn't seem to be any different to buying upvotes.</p>
-            <p>But I like to use a platform first before writing about them so if you have any more information on it, would be great to hear 🙂</p>
-            <p>
-                Posted using
-                <a href="https://steemit.com/@partiko-android">Partiko Android</a>
-            </p>
-        </div>
+        <div class="comment-line" v-html="this.$md.render(body)"></div>
         <span class="comment-line comment-votes-line">
             <md-icon>monetization_on</md-icon>
             <span class="span-padding-right">{{ money }}</span>
@@ -34,7 +24,7 @@
             <voting-line></voting-line>
             <span class="span-padding-right"></span>
             <span class="span-padding-right">|</span>
-            <vote-line :votes="votes"></vote-line>
+            <vote-line :votes="this.$activeVotesToVotes(active_votes)"></vote-line>
             <span class="span-padding-right"></span>
             <span class="span-padding-right">|</span>
             <md-button v-on:click="reply = true" class="md-raised">
@@ -61,13 +51,14 @@
             <comment
                 v-for="comment in replies"
                 v-bind:key="comment.id"
-                :pseudo="comment.pseudo"
-                :avatar="comment.avatar"
-                :date="comment.date"
-                :money="comment.money"
-                :votes="comment.votes"
-                :opinion="comment.opinion"
+                :pseudo="comment.author"
+                avatar="test"
+                :date="comment.created"
+                :money="comment.pending_payout_value"
+                :active_votes="comment.active_votes"
+                :opinion="-1"
                 :replies="comment.replies"
+                :body="comment.body"
             />
         </div>
     </div>
@@ -79,6 +70,7 @@ import VotingLine from "./VotingLine";
 import Editor from "./Editor";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
+import Remarkable from "remarkable";
 
 export default {
     name: "Comment",
@@ -88,38 +80,41 @@ export default {
         VotingLine,
         Editor
     },
-    data: () => ({
-        reply: false,
-        form: {
-            contentComment: ""
-        },
-        commentSaved: false,
-        sending: false,
-        opinionChar: opinion => {
-            switch (opinion) {
-                case 0: {
-                    return "👎";
-                }
-                case 1: {
-                    return "👍";
-                }
-                case 2: {
-                    return "😐";
-                }
-                default: {
-                    return "-";
-                }
-            }
-        }
-    }),
     props: {
         pseudo: String,
         avatar: String,
         date: String,
-        money: Number,
-        votes: Object,
+        money: String,
+        active_votes: Array,
         opinion: Number,
-        replies: Array
+        replies: Array,
+        body: String
+    },
+    data: function() {
+        return {
+            reply: false,
+            form: {
+                contentComment: ""
+            },
+            commentSaved: false,
+            sending: false,
+            opinionChar: opinion => {
+                switch (opinion) {
+                    case 0: {
+                        return "👎";
+                    }
+                    case 1: {
+                        return "👍";
+                    }
+                    case 2: {
+                        return "😐";
+                    }
+                    default: {
+                        return "-";
+                    }
+                }
+            }
+        };
     },
     validations: {
         form: {

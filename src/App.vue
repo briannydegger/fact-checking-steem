@@ -71,7 +71,7 @@
                 </div>
             </md-app-toolbar>
             <md-app-content>
-                <router-view :access-token="access_token"></router-view>
+                <router-view :access-token="access_token" :api="api"></router-view>
             </md-app-content>
         </md-app>
     </div>

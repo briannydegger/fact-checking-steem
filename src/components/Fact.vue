@@ -14,7 +14,7 @@
         </md-card-content>
 
         <md-card-header>
-            <router-link :to="'/fact/' + this.$vnode.key">
+            <router-link :to="'/fact/' + author + '/' + permlink">
                 <div class="md-title">{{ title }}</div>
             </router-link>
             <div class="md-subhead">
