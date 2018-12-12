@@ -1,7 +1,8 @@
 <template>
     <div class="comment">
         <md-avatar>
-            <img :src="avatar" alt="Avatar">
+            <img v-if="imageLoaded && avatar != ''" :src="avatar" @error="imageLoaded = false;">
+            <md-icon v-else>person</md-icon>
         </md-avatar>
         <div class="comment-line pseudo-line">
             <md-icon>account_circle</md-icon>
@@ -52,7 +53,6 @@
                 v-for="comment in replies"
                 v-bind:key="comment.id"
                 :pseudo="comment.author"
-                avatar="test"
                 :date="comment.created"
                 :money="comment.pending_payout_value"
                 :active_votes="comment.active_votes"
@@ -82,7 +82,6 @@ export default {
     },
     props: {
         pseudo: String,
-        avatar: String,
         date: String,
         money: String,
         active_votes: Array,
@@ -98,6 +97,8 @@ export default {
             },
             commentSaved: false,
             sending: false,
+            avatar: "",
+            imageLoaded: true,
             opinionChar: opinion => {
                 switch (opinion) {
                     case 0: {
@@ -151,6 +152,19 @@ export default {
                 this.saveComment();
             }
         }
+    },
+    mounted: function() {
+        let that = this;
+        this.$dsteemClient.database
+            .call("get_accounts", [[this.pseudo]])
+            .then(result => {
+                if (result[0]) {
+                    that.imageLoaded = true;
+                    that.avatar = JSON.parse(
+                        result[0].json_metadata
+                    ).profile.profile_image;
+                }
+            });
     }
 };
 </script>

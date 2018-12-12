@@ -61,7 +61,6 @@
                     v-for="comment in comments"
                     v-bind:key="comment.id"
                     :pseudo="comment.author"
-                    avatar
                     :date="comment.created"
                     :money="comment.total_payout_value"
                     :active_votes="comment.active_votes"
