@@ -47,7 +47,7 @@ Vue.prototype.$activeVotesToVotes = (active_votes) => {
             if (vote.percent < 0) {
                 votes.negativeVote++;
                 votes.opinions[vote.voter] = 0;
-            } else if (vote.percent < 100) {
+            } else if (vote.percent == 1) {
                 votes.nullVote++;
                 votes.opinions[vote.voter] = 2;
             } else {
