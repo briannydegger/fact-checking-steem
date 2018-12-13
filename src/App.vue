@@ -71,31 +71,22 @@
                 </div>
             </md-app-toolbar>
             <md-app-content>
-                <router-view :access-token="access_token" :api="api"></router-view>
+                <router-view :access-token="access_token"></router-view>
             </md-app-content>
         </md-app>
     </div>
 </template>
 
 <script>
-import sc2 from "steemconnect";
-
 export default {
     name: "App",
     data: function() {
-        // init steemconnect
-        let api = sc2.Initialize({
-            app: "fact-checking",
-            callbackURL: "http://localhost:8080",
-            accessToken: "access_token",
-            scope: ["vote", "comment"]
-        });
         let access_token = new URLSearchParams(document.location.search).get(
             "access_token"
         );
 
         if (access_token) {
-            api.setAccessToken(access_token);
+            this.$apiSteemconnect.setAccessToken(access_token);
         }
 
         let username = new URLSearchParams(document.location.search).get(
@@ -105,8 +96,7 @@ export default {
         return {
             selectedSuggestion: null,
             suggestion: [],
-            api: api,
-            link: api.getLoginURL(),
+            link: this.$apiSteemconnect.getLoginURL(),
             access_token: access_token,
             username: username,
             usernameDisplay: username,
@@ -123,7 +113,7 @@ export default {
         logOut: function() {
             this.waitingLogout = true;
             var that = this;
-            this.api.revokeToken(function(err, res) {
+            this.$apiSteemconnect.revokeToken(function(err, res) {
                 if (res && res.success) {
                     that.access_token = null;
                     document.location.href = "/";
@@ -135,7 +125,7 @@ export default {
     mounted: function() {
         if (this.access_token) {
             let that = this;
-            this.api.me(function(err, result) {
+            this.$apiSteemconnect.me(function(err, result) {
                 if (!err) {
                     let json_metadata = JSON.parse(
                         result.account.json_metadata

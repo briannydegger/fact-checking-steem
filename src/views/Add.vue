@@ -55,8 +55,7 @@ export default {
         Editor
     },
     props: {
-        accessToken: String,
-        api: Object
+        accessToken: String
     },
     mixins: [validationMixin],
     data: () => ({

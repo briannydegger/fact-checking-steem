@@ -5,6 +5,7 @@ import VueMaterial from 'vue-material';
 import VueRouter from 'vue-router';
 import 'vue-material/dist/vue-material.min.css';
 import 'vue-material/dist/theme/default.css';
+import sc2 from "steemconnect";
 import 'babel-polyfill';
 const dsteem = require("dsteem");
 import Remarkable from "remarkable";
@@ -15,6 +16,14 @@ Vue.use(VueRouter);
 Vue.use(VueMaterial);
 
 // Globals function and variable
+// init steemconnect
+Vue.prototype.$apiSteemconnect = sc2.Initialize({
+    app: "fact-checking",
+    callbackURL: "http://localhost:8080",
+    accessToken: "access_token",
+    scope: ["vote", "comment"]
+});
+
 Vue.prototype.$votesInit = {
     positiveVote: 0,
     negativeVote: 0,
