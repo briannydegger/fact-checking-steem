@@ -22,7 +22,12 @@
             <span class="span-padding-right">{{ money }}</span>
             <span class="span-padding-right">|</span>
 
-            <voting-line :opinion="votes.opinions[$username.getUsername()]"></voting-line>
+            <voting-line
+                :opinion="votes.opinions[$username.getUsername()]"
+                :author="pseudo"
+                :permlink="permlink"
+                :nullVoteEnable="false"
+            ></voting-line>
             <span class="span-padding-right"></span>
             <span class="span-padding-right">|</span>
             <vote-line :votes="votes"></vote-line>
@@ -59,6 +64,7 @@
                 :opinion="-1"
                 :replies="comment.replies"
                 :body="comment.body"
+                :permlink="comment.permlink"
             />
         </div>
     </div>
@@ -86,7 +92,8 @@ export default {
         votes: Object,
         opinion: Number,
         replies: Array,
-        body: String
+        body: String,
+        permlink: String
     },
     data: function() {
         return {

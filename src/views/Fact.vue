@@ -71,6 +71,7 @@
                     :opinion="-1"
                     :replies="comment.replies"
                     :body="comment.body"
+                    :permlink="comment.permlink"
                 />
             </md-card-content>
         </md-card>

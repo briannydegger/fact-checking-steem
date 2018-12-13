@@ -9,7 +9,7 @@
             >&#128077;</md-button>
             <md-tooltip md-direction="bottom">True</md-tooltip>
         </span>
-        <span>
+        <span v-if="nullVoteEnable">
             <md-button
                 v-on:click="changeVote(2)"
                 class="md-raised"
@@ -39,7 +39,11 @@ export default {
             default: -1
         },
         author: String,
-        permlink: String
+        permlink: String,
+        nullVoteEnable: {
+            type: Boolean,
+            default: true
+        }
     },
     data: function() {
         return {
@@ -48,9 +52,10 @@ export default {
         };
     },
     watch: {
-        // TODO Attention. S'il clic avant l'arrivée du vote actuel, ça peut se chevaucher.
         opinion: function(opinion) {
-            this.vote = opinion;
+            if (!this.disabled) {
+                this.vote = opinion;
+            }
         }
     },
     methods: {
