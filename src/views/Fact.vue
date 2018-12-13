@@ -24,7 +24,11 @@
             <md-card-area md-inset>
                 <md-card-content>
                     <div class="votes-line">
-                        <voting-line :opinion="votes.opinions[$username.getUsername()]"></voting-line>
+                        <voting-line
+                            :author="$route.params.author"
+                            :permlink="permlink"
+                            :opinion="votes.opinions[$username.getUsername()]"
+                        ></voting-line>
                         <vote-line :votes="votes"></vote-line>
                     </div>
                 </md-card-content>
@@ -103,7 +107,8 @@ export default {
             },
             commentSaved: false,
             sending: false,
-            comments: []
+            comments: [],
+            permlink: ""
         };
     },
     validations: {
@@ -200,6 +205,7 @@ export default {
                 this.title = result.title;
                 this.created = result.created;
                 this.votes = this.$activeVotesToVotes(result.active_votes);
+                this.permlink = result.permlink;
                 fetchReplies(
                     this.$route.params.author,
                     this.$route.params.permlink

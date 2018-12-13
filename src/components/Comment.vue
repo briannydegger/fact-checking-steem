@@ -70,7 +70,6 @@ import VotingLine from "./VotingLine";
 import Editor from "./Editor";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
-import Remarkable from "remarkable";
 
 export default {
     name: "Comment",
