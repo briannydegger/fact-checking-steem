@@ -30,7 +30,7 @@
             ></voting-line>
             <span class="span-padding-right"></span>
             <span class="span-padding-right">|</span>
-            <vote-line :votes="votes"></vote-line>
+            <vote-line :votes="votes" :nullVoteEnable="false"></vote-line>
             <span class="span-padding-right"></span>
             <span class="span-padding-right">|</span>
             <md-button v-on:click="reply = true" class="md-raised">
