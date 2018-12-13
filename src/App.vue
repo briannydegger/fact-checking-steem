@@ -56,7 +56,7 @@
                         <md-avatar class="md-icon-button">
                             <img v-if="profile_image" :src="profile_image" alt="Avatar">
                             <md-icon v-else>person</md-icon>
-                            <md-tooltip>{{ username }}</md-tooltip>
+                            <md-tooltip>{{ usernameDisplay }}</md-tooltip>
                         </md-avatar>
                         <md-button v-on:click="logOut()" class="md-raised">
                             <span>Logout</span>
@@ -82,7 +82,7 @@ import sc2 from "steemconnect";
 
 export default {
     name: "App",
-    data: () => {
+    data: function() {
         // init steemconnect
         let api = sc2.Initialize({
             app: "fact-checking",
@@ -98,18 +98,26 @@ export default {
             api.setAccessToken(access_token);
         }
 
+        let username = new URLSearchParams(document.location.search).get(
+            "username"
+        );
+        this.$username.setUsername(username);
         return {
             selectedSuggestion: null,
             suggestion: [],
             api: api,
             link: api.getLoginURL(),
             access_token: access_token,
-            username: new URLSearchParams(document.location.search).get(
-                "username"
-            ),
+            username: username,
+            usernameDisplay: username,
             profile_image: "",
             waitingLogout: false
         };
+    },
+    watch: {
+        username: function(username) {
+            this.$username.setUsername(username);
+        }
     },
     methods: {
         logOut: function() {
@@ -132,7 +140,7 @@ export default {
                     let json_metadata = JSON.parse(
                         result.account.json_metadata
                     );
-                    that.username = json_metadata.profile.name;
+                    that.usernameDisplay = json_metadata.profile.name;
                     that.profile_image = json_metadata.profile.profile_image;
                 }
             });

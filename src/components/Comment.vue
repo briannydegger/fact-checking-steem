@@ -22,10 +22,10 @@
             <span class="span-padding-right">{{ money }}</span>
             <span class="span-padding-right">|</span>
 
-            <voting-line></voting-line>
+            <voting-line :opinion="votes.opinions[$username.getUsername()]"></voting-line>
             <span class="span-padding-right"></span>
             <span class="span-padding-right">|</span>
-            <vote-line :votes="this.$activeVotesToVotes(active_votes)"></vote-line>
+            <vote-line :votes="votes"></vote-line>
             <span class="span-padding-right"></span>
             <span class="span-padding-right">|</span>
             <md-button v-on:click="reply = true" class="md-raised">
@@ -55,7 +55,7 @@
                 :pseudo="comment.author"
                 :date="comment.created"
                 :money="comment.pending_payout_value"
-                :active_votes="comment.active_votes"
+                :votes="$activeVotesToVotes(comment.active_votes)"
                 :opinion="-1"
                 :replies="comment.replies"
                 :body="comment.body"
@@ -84,7 +84,7 @@ export default {
         pseudo: String,
         date: String,
         money: String,
-        active_votes: Array,
+        votes: Object,
         opinion: Number,
         replies: Array,
         body: String

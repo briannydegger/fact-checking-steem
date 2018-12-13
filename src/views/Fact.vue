@@ -24,7 +24,7 @@
             <md-card-area md-inset>
                 <md-card-content>
                     <div class="votes-line">
-                        <voting-line></voting-line>
+                        <voting-line :opinion="votes.opinions[$username.getUsername()]"></voting-line>
                         <vote-line :votes="votes"></vote-line>
                     </div>
                 </md-card-content>
@@ -63,7 +63,7 @@
                     :pseudo="comment.author"
                     :date="comment.created"
                     :money="comment.total_payout_value"
-                    :active_votes="comment.active_votes"
+                    :votes="$activeVotesToVotes(comment.active_votes)"
                     :opinion="-1"
                     :replies="comment.replies"
                     :body="comment.body"

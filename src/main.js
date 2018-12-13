@@ -19,6 +19,7 @@ Vue.prototype.$votesInit = {
     positiveVote: 0,
     negativeVote: 0,
     nullVote: 0,
+    opinions: [],
     uncertain: false,
     percent: 100
 };
@@ -26,16 +27,24 @@ Vue.prototype.$activeVotesToVotes = (active_votes) => {
     let votes = {
         positiveVote: 0,
         negativeVote: 0,
-        nullVote: 0
+        nullVote: 0,
+        opinions: [],
+        uncertain: false,
+        percent: 100
     };
 
     active_votes.forEach(vote => {
-        if (vote.percent < 0) {
-            votes.negativeVote++;
-        } else if (vote.percent < 100) {
-            votes.nullVote++;
-        } else {
-            votes.positiveVote++;
+        if (vote.percent != 0) {
+            if (vote.percent < 0) {
+                votes.negativeVote++;
+                votes.opinions[vote.voter] = 0;
+            } else if (vote.percent < 100) {
+                votes.nullVote++;
+                votes.opinions[vote.voter] = 2;
+            } else {
+                votes.positiveVote++;
+                votes.opinions[vote.voter] = 1;
+            }
         }
     });
 
@@ -51,6 +60,20 @@ Vue.prototype.$md = new Remarkable({
     html: true,
     linkify: true
 });
+class User {
+    constructor() {
+        this.username = "";
+    }
+
+    setUsername(name) {
+        this.username = name;
+    }
+
+    getUsername() {
+        return this.username;
+    }
+}
+Vue.prototype.$username = new User();
 
 new Vue({
     router,

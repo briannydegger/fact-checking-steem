@@ -30,9 +30,20 @@
 <script>
 export default {
     name: "VotingLine",
-    data: () => ({
-        vote: -1
-    }),
+    props: {
+        opinion: Number
+    },
+    data: function() {
+        return {
+            vote: this.opinion
+        };
+    },
+    watch: {
+        // TODO Attention. S'il clic avant l'arrivée du vote actuel, ça peut se chevaucher.
+        opinion: function(opinion) {
+            this.vote = opinion;
+        }
+    },
     methods: {
         changeVote: function(voteClicked) {
             this.vote = this.vote == voteClicked ? -1 : voteClicked;
