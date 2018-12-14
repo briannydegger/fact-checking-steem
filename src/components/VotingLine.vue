@@ -59,6 +59,18 @@ export default {
         }
     },
     methods: {
+        voteToStringVote: vote => {
+            switch (vote) {
+                case 0:
+                    return "negativeVote";
+                case 1:
+                    return "positiveVote";
+                case 2:
+                    return "nullVote";
+                default:
+                    return "";
+            }
+        },
         changeVote: function(voteClicked) {
             this.disabled = true;
             let newVote = this.vote == voteClicked ? -1 : voteClicked;
@@ -76,11 +88,15 @@ export default {
                     ? 1
                     : 0,
                 function(err) {
+                    let newState = [];
+                    newState[that.voteToStringVote(that.vote)] = -1;
+                    newState[that.voteToStringVote(newVote)] = 1;
                     if (err) {
                         alert(err);
                     } else {
                         that.vote = newVote;
                     }
+                    that.$emit("change", newState);
                     that.disabled = false;
                 }
             );

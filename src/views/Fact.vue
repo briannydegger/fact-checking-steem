@@ -28,6 +28,7 @@
                             :author="$route.params.author"
                             :permlink="permlink"
                             :opinion="votes.opinions[$username.getUsername()]"
+                            v-on:change="votingChange"
                         ></voting-line>
                         <vote-line :votes="votes"></vote-line>
                     </div>
@@ -146,6 +147,12 @@ export default {
             if (!this.$v.$invalid) {
                 this.saveComment();
             }
+        },
+        votingChange(newVotesState) {
+            let that = this;
+            Object.keys(newVotesState).forEach(function(key) {
+                that.votes[key] += newVotesState[key];
+            });
         }
     },
     mounted: function() {
