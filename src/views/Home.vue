@@ -11,6 +11,7 @@
             :author="post.author"
             :permlink="post.permlink"
         />
+        <div v-if="posts.length == 0">There's no fact</div>
     </div>
 </template>
 
@@ -32,7 +33,7 @@ export default {
         const client = new dsteem.Client("https://api.steemit.com");
         client.database
             .getDiscussions("hot", {
-                tag: "life",
+                tag: "fact-checking",
                 limit: 5
             })
             .then(result => {
