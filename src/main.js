@@ -82,7 +82,7 @@ class User {
         return this.username;
     }
 }
-Vue.prototype.$username = new User();
+Vue.prototype.$user = new User();
 
 new Vue({
     router,

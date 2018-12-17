@@ -23,7 +23,7 @@
             <span class="span-padding-right">|</span>
 
             <voting-line
-                :opinion="votes.opinions[$username.getUsername()]"
+                :opinion="votes.opinions[$user.getUsername()]"
                 :author="pseudo"
                 :permlink="permlink"
                 :nullVoteEnable="false"

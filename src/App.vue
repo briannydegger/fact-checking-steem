@@ -92,7 +92,7 @@ export default {
         let username = new URLSearchParams(document.location.search).get(
             "username"
         );
-        this.$username.setUsername(username);
+        this.$user.setUsername(username);
         return {
             selectedSuggestion: null,
             suggestion: [],
@@ -106,7 +106,7 @@ export default {
     },
     watch: {
         username: function(username) {
-            this.$username.setUsername(username);
+            this.$user.setUsername(username);
         }
     },
     methods: {

@@ -77,7 +77,7 @@ export default {
 
             let that = this;
             this.$apiSteemconnect.vote(
-                this.$username.getUsername(),
+                this.$user.getUsername(),
                 this.author,
                 this.permlink,
                 newVote == 0

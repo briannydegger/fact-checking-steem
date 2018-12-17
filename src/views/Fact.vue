@@ -27,7 +27,7 @@
                         <voting-line
                             :author="$route.params.author"
                             :permlink="permlink"
-                            :opinion="votes.opinions[$username.getUsername()]"
+                            :opinion="votes.opinions[$user.getUsername()]"
                             v-on:change="votingChange"
                         ></voting-line>
                         <vote-line :votes="votes"></vote-line>
