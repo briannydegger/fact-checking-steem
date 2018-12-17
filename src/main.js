@@ -15,13 +15,15 @@ Vue.config.productionTip = false;
 Vue.use(VueRouter);
 Vue.use(VueMaterial);
 
+/* eslint-disable no-console */
+
 // Globals function and variable
 // init steemconnect
 Vue.prototype.$apiSteemconnect = sc2.Initialize({
     app: "fact-checking",
     callbackURL: "http://localhost:8080",
     accessToken: "access_token",
-    scope: ["vote", "comment"]
+    scope: ["vote", "comment", "comment_options"]
 });
 
 Vue.prototype.$votesInit = {

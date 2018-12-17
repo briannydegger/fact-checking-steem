@@ -39,7 +39,13 @@
                 </md-card-actions>
             </md-card>
 
-            <md-snackbar :md-active.sync="factSaved">The fact {{ lastFact }} was saved with success!</md-snackbar>
+            <md-snackbar :md-active="factSaved">
+                <span>The fact
+                    <router-link
+                        :to="'/fact/' + $user.getUsername() + '/' + permlink"
+                    >{{ lastFact }}</router-link>&nbsp;was saved with success!
+                </span>
+            </md-snackbar>
         </form>
     </div>
 </template>
@@ -60,12 +66,13 @@ export default {
     mixins: [validationMixin],
     data: () => ({
         form: {
-            title: null,
+            title: "",
             content: ""
         },
         factSaved: false,
         sending: false,
-        lastFact: null
+        lastFact: null,
+        permlink: ""
     }),
     validations: {
         form: {
@@ -74,7 +81,6 @@ export default {
             },
             content: {
                 required
-                //minLength: minLength(3)
             }
         }
     },
@@ -95,14 +101,61 @@ export default {
         },
         saveFact() {
             this.sending = true;
+            this.permlink = this.form.title
+                .toLowerCase()
+                .replace(/[^A-Za-z0-9]+/g, "-");
 
-            // Instead of this timeout, here you can call your API
-            window.setTimeout(() => {
-                this.lastFact = `${this.form.title}`;
-                this.factSaved = true;
-                this.sending = false;
-                this.clearForm();
-            }, 1500);
+            let that = this;
+            this.$apiSteemconnect.broadcast(
+                [
+                    [
+                        "comment",
+                        {
+                            author: this.$user.getUsername(),
+                            body: this.form.content,
+                            json_metadata: JSON.stringify({
+                                tags: ["fact-checking-app"],
+                                app: "fact-checking"
+                            }),
+                            parent_author: "",
+                            parent_permlink: "fact-checking-app",
+                            permlink: this.permlink,
+                            title: this.form.title
+                        }
+                    ],
+                    [
+                        "comment_options",
+                        {
+                            allow_curation_rewards: true,
+                            allow_votes: true,
+                            author: this.$user.getUsername(),
+                            max_accepted_payout: "0.000 SBD",
+                            percent_steem_dollars: 10000,
+                            permlink: this.permlink,
+                            extensions: [
+                                [
+                                    0,
+                                    {
+                                        beneficiaries: [
+                                            { account: "null", weight: 1 }
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                ],
+                function(err, result) {
+                    if (err) {
+                        alert(err.error_description);
+                    } else {
+                        that.lastFact = `${that.form.title}`;
+                        that.factSaved = true;
+                        that.clearForm();
+                    }
+                    that.sending = false;
+                }
+            );
         },
         validateFact() {
             this.$v.$touch();

@@ -32,9 +32,9 @@ export default {
         this.recuperating = true;
         const client = new dsteem.Client("https://api.steemit.com");
         client.database
-            .getDiscussions("hot", {
-                tag: "fact-checking",
-                limit: 5
+            .getDiscussions("created", {
+                tag: "fact-checking-app",
+                limit: 10
             })
             .then(result => {
                 if (result) {
