@@ -1,6 +1,5 @@
 <template>
     <div>
-        <md-progress-bar md-mode="indeterminate" v-if="recuperating"></md-progress-bar>
         <fact
             v-for="post in posts"
             v-bind:key="post.id"
@@ -11,6 +10,7 @@
             :author="post.author"
             :permlink="post.permlink"
         />
+        <md-progress-bar md-mode="indeterminate" v-if="recuperating"></md-progress-bar>
         <div v-if="posts.length == 0">There's no fact</div>
     </div>
 </template>
@@ -26,25 +26,58 @@ export default {
     },
     data: () => ({
         posts: [],
-        recuperating: false
+        recuperating: false,
+        fetchTouchEnd: false
     }),
-    mounted: function() {
-        this.recuperating = true;
-        const client = new dsteem.Client("https://api.steemit.com");
-        client.database
-            .getDiscussions("created", {
-                tag: "fact-checking-app",
-                limit: 10
-            })
-            .then(result => {
-                if (result) {
-                    this.posts = result;
+    methods: {
+        fetchFacts() {
+            if (!this.recuperating && !this.fetchTouchEnd) {
+                this.recuperating = true;
+                const client = new dsteem.Client("https://api.steemit.com");
+                let params = { tag: "fact-checking-app", limit: 20 };
+                if (this.posts.length > 0) {
+                    params.start_author = this.posts[
+                        this.posts.length - 1
+                    ].author;
+                    params.start_permlink = this.posts[
+                        this.posts.length - 1
+                    ].permlink;
                 }
-                this.recuperating = false;
-            })
-            .catch(err => {
-                console.log(err);
-            });
+                client.database
+                    .getDiscussions("created", params)
+                    .then(result => {
+                        if (result) {
+                            // Remove duplicates
+                            for (var i = 0; i < result.length; ++i) {
+                                for (var j = 0; j < this.posts.length; ++j) {
+                                    if (result[i].id === this.posts[j].id)
+                                        result.splice(i--, 1);
+                                }
+                            }
+                            if (result.length == 0) {
+                                this.fetchTouchEnd = true;
+                            }
+
+                            this.posts = this.posts.concat(result);
+                        }
+                        this.recuperating = false;
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            }
+        }
+    },
+    mounted: function() {
+        this.fetchFacts();
+        window.onscroll = () => {
+            if (
+                window.innerHeight + window.scrollY + 20 >=
+                document.body.offsetHeight
+            ) {
+                this.fetchFacts();
+            }
+        };
     }
 };
 </script>
