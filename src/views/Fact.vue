@@ -131,14 +131,42 @@ export default {
         },
         saveComment() {
             this.sending = true;
+            let that = this;
+            let permlinkComment = Math.random()
+                .toString(36)
+                .substring(2);
 
-            // Instead of this timeout, here you can call your API
-            window.setTimeout(() => {
-                this.commentSaved = true;
-                this.sending = false;
-                this.$v.$reset();
-                this.form.contentComment = "";
-            }, 1500);
+            this.$apiSteemconnect.comment(
+                this.author,
+                this.permlink,
+                this.$user.getUsername(),
+                permlinkComment,
+                "",
+                this.form.contentComment,
+                "",
+                function(err, res) {
+                    console.log(err, res);
+                    if (err) {
+                        alert(err.error_description);
+                    } else {
+                        that.commentSaved = true;
+                        that.$v.$reset();
+                        that.form.contentComment = "";
+                        that.reply = false;
+
+                        that.$dsteemClient.database
+                            .call("get_content", [
+                                that.$user.getUsername(),
+                                permlinkComment
+                            ])
+                            .then(result => {
+                                console.log(result);
+                                that.comments.push(result);
+                            });
+                    }
+                    that.sending = false;
+                }
+            );
         },
         validateComment() {
             this.$v.$touch();
