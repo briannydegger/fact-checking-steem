@@ -106,7 +106,9 @@ export default {
             sending: false,
             avatar: "",
             imageLoaded: true,
-            opinionChar: "-",
+            opinionChar: this.opinionToChar(
+                this.votesFact.opinions[this.pseudo]
+            ),
             commentReplies: this.replies
         };
     },
