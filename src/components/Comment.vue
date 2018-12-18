@@ -252,4 +252,8 @@ export default {
 .replies {
     padding-left: 50px;
 }
+
+.comment .md-icon {
+    margin-right: 3px;
+}
 </style>

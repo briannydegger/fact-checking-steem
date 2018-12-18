@@ -272,6 +272,10 @@ export default {
     padding-right: 10px;
 }
 
+.md-subhead .md-icon {
+    margin-right: 3px;
+}
+
 #reply-content {
     margin-bottom: 15px;
 }
