@@ -14,7 +14,7 @@
             <md-icon>access_time</md-icon>
             <span class="span-padding-right">{{ date }}</span>
             <span class="span-padding-right">|</span>
-            <span>Opinion : {{ opinionChar(opinion) }}</span>
+            <span>His opinion : {{ opinionChar(votesFact.opinions[pseudo]) }}</span>
         </div>
         <div class="comment-line" v-html="this.$md.render(body)"></div>
         <span class="comment-line comment-votes-line">
@@ -55,13 +55,13 @@
         </div>
         <div class="replies">
             <comment
-                v-for="comment in replies"
+                v-for="comment in commentReplies"
                 v-bind:key="comment.id"
                 :pseudo="comment.author"
                 :date="comment.created"
                 :money="comment.pending_payout_value"
                 :votes="$activeVotesToVotes(comment.active_votes)"
-                :opinion="-1"
+                :votesFact="votesFact"
                 :replies="comment.replies"
                 :body="comment.body"
                 :permlink="comment.permlink"
@@ -90,7 +90,7 @@ export default {
         date: String,
         money: String,
         votes: Object,
-        opinion: Number,
+        votesFact: Object,
         replies: Array,
         body: String,
         permlink: String
@@ -120,8 +120,14 @@ export default {
                         return "-";
                     }
                 }
-            }
+            },
+            commentReplies: this.replies
         };
+    },
+    watch: {
+        replies: function() {
+            this.commentReplies = this.replies;
+        }
     },
     validations: {
         form: {

@@ -92,7 +92,7 @@ export default {
                     newState[that.voteToStringVote(that.vote)] = -1;
                     newState[that.voteToStringVote(newVote)] = 1;
                     if (err) {
-                        alert(err);
+                        alert(err.error_description);
                     } else {
                         that.vote = newVote;
                     }

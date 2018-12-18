@@ -8,9 +8,7 @@
                         <md-icon>account_circle</md-icon>
                         <span>
                             <strong>
-                                <a
-                                    :href="'https://steemit.com/@' + $route.params.author"
-                                >{{ $route.params.author }}</a>
+                                <a :href="'https://steemit.com/@' + author">{{ author }}</a>
                             </strong>
                         </span>
                         <md-icon>access_time</md-icon>
@@ -69,10 +67,10 @@
                     :date="comment.created"
                     :money="comment.total_payout_value"
                     :votes="$activeVotesToVotes(comment.active_votes)"
-                    :opinion="-1"
                     :replies="comment.replies"
                     :body="comment.body"
                     :permlink="comment.permlink"
+                    :votesFact="votes"
                 />
             </md-card-content>
         </md-card>
@@ -110,7 +108,8 @@ export default {
             commentSaved: false,
             sending: false,
             comments: [],
-            permlink: ""
+            permlink: "",
+            author: ""
         };
     },
     validations: {
@@ -153,6 +152,7 @@ export default {
             Object.keys(newVotesState).forEach(function(key) {
                 that.votes[key] += newVotesState[key];
             });
+            this.votes.opinions[this.$user.getUsername()] = newVotesState;
         }
     },
     mounted: function() {
@@ -214,6 +214,7 @@ export default {
                 this.created = result.created;
                 this.votes = this.$activeVotesToVotes(result.active_votes);
                 this.permlink = result.permlink;
+                this.author = result.author;
                 fetchReplies(
                     this.$route.params.author,
                     this.$route.params.permlink
