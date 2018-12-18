@@ -145,7 +145,7 @@ export default {
                         }
                     ]
                 ],
-                function(err, result) {
+                function(err) {
                     if (err) {
                         alert(err.error_description);
                     } else {

@@ -14,7 +14,7 @@
             <md-icon>access_time</md-icon>
             <span class="span-padding-right">{{ date }}</span>
             <span class="span-padding-right">|</span>
-            <span>His opinion : {{ opinionChar(votesFact.opinions[pseudo]) }}</span>
+            <span>His opinion : {{ opinionChar }}</span>
         </div>
         <div class="comment-line" v-html="this.$md.render(body)"></div>
         <span class="comment-line comment-votes-line">
@@ -105,28 +105,21 @@ export default {
             sending: false,
             avatar: "",
             imageLoaded: true,
-            opinionChar: opinion => {
-                switch (opinion) {
-                    case 0: {
-                        return "👎";
-                    }
-                    case 1: {
-                        return "👍";
-                    }
-                    case 2: {
-                        return "😐";
-                    }
-                    default: {
-                        return "-";
-                    }
-                }
-            },
+            opinionChar: "-",
             commentReplies: this.replies
         };
     },
     watch: {
         replies: function() {
             this.commentReplies = this.replies;
+        },
+        votesFact: {
+            handler(votesFact) {
+                this.opinionChar = this.opinionToChar(
+                    votesFact.opinions[this.pseudo]
+                );
+            },
+            deep: true
         }
     },
     validations: {
@@ -162,22 +155,20 @@ export default {
                 this.form.contentComment,
                 "",
                 function(err, res) {
-                    console.log(err, res);
                     if (err) {
                         alert(err.error_description);
                     } else {
-                        that.commentSaved = true;
-                        that.$v.$reset();
-                        that.form.contentComment = "";
-                        that.reply = false;
-
                         that.$dsteemClient.database
                             .call("get_content", [
                                 that.$user.getUsername(),
                                 permlinkComment
                             ])
                             .then(result => {
-                                console.log(result);
+                                that.commentSaved = true;
+                                that.$v.$reset();
+                                that.form.contentComment = "";
+                                that.reply = false;
+
                                 that.commentReplies.push(result);
                             });
                     }
@@ -190,6 +181,22 @@ export default {
 
             if (!this.$v.$invalid) {
                 this.saveComment();
+            }
+        },
+        opinionToChar: opinion => {
+            switch (opinion) {
+                case 0: {
+                    return "👎";
+                }
+                case 1: {
+                    return "👍";
+                }
+                case 2: {
+                    return "😐";
+                }
+                default: {
+                    return "-";
+                }
             }
         }
     },

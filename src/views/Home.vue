@@ -63,6 +63,7 @@ export default {
                         this.recuperating = false;
                     })
                     .catch(err => {
+                        /* eslint-disable no-console */
                         console.log(err);
                     });
             }

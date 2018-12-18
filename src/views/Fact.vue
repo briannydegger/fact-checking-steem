@@ -145,7 +145,6 @@ export default {
                 this.form.contentComment,
                 "",
                 function(err, res) {
-                    console.log(err, res);
                     if (err) {
                         alert(err.error_description);
                     } else {
@@ -160,7 +159,6 @@ export default {
                                 permlinkComment
                             ])
                             .then(result => {
-                                console.log(result);
                                 that.comments.push(result);
                             });
                     }
@@ -175,12 +173,12 @@ export default {
                 this.saveComment();
             }
         },
-        votingChange(newVotesState) {
+        votingChange(newVotesState, newVote) {
             let that = this;
+            this.votes.opinions[this.$user.getUsername()] = newVote;
             Object.keys(newVotesState).forEach(function(key) {
                 that.votes[key] += newVotesState[key];
             });
-            this.votes.opinions[this.$user.getUsername()] = newVotesState;
         }
     },
     mounted: function() {

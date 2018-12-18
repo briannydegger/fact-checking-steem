@@ -96,7 +96,7 @@ export default {
                     } else {
                         that.vote = newVote;
                     }
-                    that.$emit("change", newState);
+                    that.$emit("change", newState, newVote);
                     that.disabled = false;
                 }
             );
