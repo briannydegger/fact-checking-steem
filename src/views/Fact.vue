@@ -144,7 +144,7 @@ export default {
                 "",
                 this.form.contentComment,
                 "",
-                function(err, res) {
+                function(err) {
                     if (err) {
                         alert(err.error_description);
                     } else {

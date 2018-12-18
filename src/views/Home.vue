@@ -1,7 +1,7 @@
 <template>
     <div>
         <fact
-            v-for="post in posts"
+            v-for="post in posts.filter(filterPosts)"
             v-bind:key="post.id"
             :title="post.title"
             :active_votes="post.active_votes"
@@ -23,6 +23,9 @@ export default {
     name: "home",
     components: {
         Fact
+    },
+    props: {
+        filter: String
     },
     data: () => ({
         posts: [],
@@ -67,6 +70,11 @@ export default {
                         console.log(err);
                     });
             }
+        },
+        filterPosts: function(post) {
+            return (
+                post.title.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0
+            );
         }
     },
     mounted: function() {

@@ -95,8 +95,8 @@ export default {
                         alert(err.error_description);
                     } else {
                         that.vote = newVote;
+                        that.$emit("change", newState, newVote);
                     }
-                    that.$emit("change", newState, newVote);
                     that.disabled = false;
                 }
             );

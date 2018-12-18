@@ -34,17 +34,14 @@
                         </router-link>
                     </div>
 
-                    <form>
-                        <md-autocomplete
-                            class="search"
-                            v-model="selectedSuggestion"
-                            :md-options="suggestion"
-                            md-layout="box"
-                            required
-                        >
-                            <label>Search...</label>
-                        </md-autocomplete>
-                    </form>
+                    <md-autocomplete
+                        class="search"
+                        v-model="filter"
+                        :md-options="[]"
+                        md-layout="box"
+                    >
+                        <label>Filter...</label>
+                    </md-autocomplete>
 
                     <div v-if="access_token" class="md-toolbar-section-end">
                         <md-button class="md-icon-button">
@@ -71,7 +68,7 @@
                 </div>
             </md-app-toolbar>
             <md-app-content>
-                <router-view :access-token="access_token"></router-view>
+                <router-view :access-token="access_token" :filter="filter"></router-view>
             </md-app-content>
         </md-app>
     </div>
@@ -94,8 +91,7 @@ export default {
         );
         this.$user.setUsername(username);
         return {
-            selectedSuggestion: null,
-            suggestion: [],
+            filter: "",
             link: this.$apiSteemconnect.getLoginURL(),
             access_token: access_token,
             username: username,
@@ -107,6 +103,11 @@ export default {
     watch: {
         username: function(username) {
             this.$user.setUsername(username);
+        },
+        filter: function() {
+            if (this.$route.path != "/") {
+                this.$router.push("/");
+            }
         }
     },
     methods: {
