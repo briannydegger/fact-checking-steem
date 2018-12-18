@@ -72,6 +72,11 @@ export default {
             }
         },
         changeVote: function(voteClicked) {
+            if (!this.$user.getUsername()) {
+                alert("You have to be logged !");
+                return false;
+            }
+
             this.disabled = true;
             let newVote = this.vote == voteClicked ? -1 : voteClicked;
 

@@ -122,6 +122,7 @@ export default {
             var that = this;
             this.$apiSteemconnect.revokeToken(function(err, res) {
                 if (res && res.success) {
+                    that.$user.setUsername("");
                     that.access_token = null;
                     document.location.href = "/";
                 }

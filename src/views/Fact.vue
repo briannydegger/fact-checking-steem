@@ -133,6 +133,11 @@ export default {
             }
         },
         saveComment() {
+            if (!this.$user.getUsername()) {
+                alert("You have to be logged !");
+                return false;
+            }
+
             this.sending = true;
             let that = this;
             let permlinkComment = Math.random()
