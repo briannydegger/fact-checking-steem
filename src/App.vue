@@ -51,7 +51,13 @@
                             <md-tooltip>Add a fact</md-tooltip>
                         </md-button>
                         <md-avatar class="md-icon-button">
-                            <img v-if="profile_image" :src="profile_image" alt="Avatar">
+                            <a
+                                v-if="profile_image"
+                                :href="'https://steemit.com/@' + username"
+                                target="_blank"
+                            >
+                                <img :src="profile_image" alt="Avatar">
+                            </a>
                             <md-icon v-else>person</md-icon>
                             <md-tooltip>{{ usernameDisplay }}</md-tooltip>
                         </md-avatar>

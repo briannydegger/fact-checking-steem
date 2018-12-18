@@ -8,7 +8,10 @@
                         <md-icon>account_circle</md-icon>
                         <span>
                             <strong>
-                                <a :href="'https://steemit.com/@' + author">{{ author }}</a>
+                                <a
+                                    :href="'https://steemit.com/@' + author"
+                                    target="_blank"
+                                >{{ author }}</a>
                             </strong>
                         </span>
                         <md-icon>access_time</md-icon>

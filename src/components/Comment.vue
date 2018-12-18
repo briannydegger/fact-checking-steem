@@ -8,7 +8,7 @@
             <md-icon>account_circle</md-icon>
             <span class="span-padding-right">
                 <strong>
-                    <a :href="'https://steemit.com/@' + pseudo">{{ pseudo }}</a>
+                    <a :href="'https://steemit.com/@' + pseudo" target="_blank">{{ pseudo }}</a>
                 </strong>
             </span>
             <md-icon>access_time</md-icon>
