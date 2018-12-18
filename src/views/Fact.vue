@@ -12,7 +12,7 @@
                             </strong>
                         </span>
                         <md-icon>access_time</md-icon>
-                        <span>{{ created }}</span>
+                        <span>{{ new Date(created).toLocaleString() }}</span>
                     </div>
                 </md-card-header>
 

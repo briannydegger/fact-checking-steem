@@ -12,7 +12,7 @@
                 </strong>
             </span>
             <md-icon>access_time</md-icon>
-            <span class="span-padding-right">{{ date }}</span>
+            <span class="span-padding-right">{{ new Date(date).toLocaleString() }}</span>
             <span class="span-padding-right">|</span>
             <span>His opinion : {{ opinionChar }}</span>
         </div>
