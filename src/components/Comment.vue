@@ -1,5 +1,6 @@
 <template>
     <div class="comment">
+        <hr>
         <md-avatar>
             <img v-if="imageLoaded && avatar != ''" :src="avatar" @error="imageLoaded = false;">
             <md-icon v-else>person</md-icon>
@@ -220,6 +221,10 @@ export default {
 .comment {
     margin-top: 20px;
     min-height: 40px;
+}
+
+.comment hr {
+    margin-bottom: 20px;
 }
 
 .comment .md-avatar {
