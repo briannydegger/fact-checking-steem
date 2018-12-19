@@ -7,7 +7,7 @@
                 v-bind:class="{ 'md-primary': vote == 1 }"
                 :disabled="disabled"
             >&#128077;</md-button>
-            <md-tooltip md-direction="bottom">True</md-tooltip>
+            <md-tooltip md-direction="bottom">{{ nullVoteEnable ? "True" : "Upvote"}}</md-tooltip>
         </span>
         <span v-if="nullVoteEnable">
             <md-button
@@ -25,7 +25,7 @@
                 v-bind:class="{ 'md-primary': vote == 0 }"
                 :disabled="disabled"
             >&#128078;</md-button>
-            <md-tooltip md-direction="bottom">Fake</md-tooltip>
+            <md-tooltip md-direction="bottom">{{ nullVoteEnable ? "Fake" : "Downvote"}}</md-tooltip>
         </span>
     </span>
 </template>
