@@ -25,6 +25,7 @@
             <md-card-area md-inset>
                 <md-card-content>
                     <div class="votes-line">
+                        <percent :votes="votes"/>
                         <voting-line
                             :author="$route.params.author"
                             :permlink="permlink"
@@ -84,6 +85,7 @@
 import Comment from "../components/Comment";
 import VoteLine from "../components/VoteLine";
 import VotingLine from "../components/VotingLine";
+import Percent from "../components/Percent";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 import Editor from "../components/Editor";
@@ -96,6 +98,7 @@ export default {
         Comment,
         VoteLine,
         VotingLine,
+        Percent,
         Editor
     },
     data: function() {
@@ -187,6 +190,7 @@ export default {
             Object.keys(newVotesState).forEach(function(key) {
                 that.votes[key] += newVotesState[key];
             });
+            this.votes.update();
         }
     },
     mounted: function() {

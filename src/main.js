@@ -59,12 +59,16 @@ Vue.prototype.$activeVotesToVotes = (active_votes) => {
         }
     });
 
-    let totalVote = votes.positiveVote + votes.negativeVote;
-    votes.uncertain = totalVote < votes.nullVote;
-    votes.percent = (totalVote == 0 ? 50 :
-        (votes.positiveVote / (totalVote)) *
-        100
-    ).toFixed(1);
+    votes.update = () => {
+        let totalVote = votes.positiveVote + votes.negativeVote;
+        votes.uncertain = totalVote <= votes.nullVote;
+        votes.percent = (totalVote == 0 ? 50 :
+            (votes.positiveVote / (totalVote)) *
+            100
+        ).toFixed(1);
+    };
+    votes.update();
+
     return votes;
 };
 Vue.prototype.$dsteemClient = new dsteem.Client("https://api.steemit.com");

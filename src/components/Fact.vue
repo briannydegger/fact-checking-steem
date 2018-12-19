@@ -1,16 +1,7 @@
 <template>
     <md-card class="fact-card">
         <md-card-content class="percent">
-            <md-avatar class="md-avatar-icon" v-bind:class="{ 'percent-good': votes.percent > 49 }">
-                {{ votes.percent }}%
-                <md-tooltip
-                    md-direction="bottom"
-                >{{ votes.percent }}% of people who voted think this is true</md-tooltip>
-            </md-avatar>
-            <template v-if="votes.uncertain">
-                <span class="notif">&#9888;</span>
-                <md-tooltip md-direction="left">This fact need more details or comments !</md-tooltip>
-            </template>
+            <percent :votes="votes"/>
         </md-card-content>
 
         <md-card-header>
@@ -27,11 +18,13 @@
 
 <script>
 import VoteLine from "./VoteLine.vue";
+import Percent from "../components/Percent";
 
 export default {
     name: "Fact",
     components: {
-        VoteLine
+        VoteLine,
+        Percent
     },
     props: {
         title: String,
@@ -49,14 +42,14 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .fact-card {
     width: calc(100% - 20px);
     margin: 4px;
     height: 85px;
 }
 
-.percent {
+.fact-card .percent {
     float: left;
     width: 60px;
     height: 85px;
@@ -66,27 +59,7 @@ export default {
     text-align: center;
 }
 
-.md-avatar-icon {
-    font-size: 8pt;
-    color: black !important;
-    background-color: white !important;
-    border: 1px solid #ff5050;
-}
-
-.percent-good {
-    border: 1px solid #50ff50;
-}
-
-.notif {
-    position: absolute;
-    left: 8px;
-    bottom: 15px;
-    user-select: none;
-    cursor: default;
-    font-size: 14pt;
-}
-
-.highlight {
+.fact-card .highlight {
     text-decoration: underline;
 }
 
