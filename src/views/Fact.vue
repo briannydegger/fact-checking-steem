@@ -68,7 +68,7 @@
                     v-bind:key="comment.id"
                     :pseudo="comment.author"
                     :date="comment.created"
-                    :money="comment.total_payout_value"
+                    :money="comment.pending_payout_value"
                     :votes="$activeVotesToVotes(comment.active_votes)"
                     :replies="comment.replies"
                     :body="comment.body"
