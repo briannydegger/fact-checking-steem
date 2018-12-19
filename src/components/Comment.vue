@@ -15,7 +15,7 @@
             <md-icon>access_time</md-icon>
             <span class="span-padding-right">{{ new Date(date).toLocaleString() }}</span>
             <span class="span-padding-right">|</span>
-            <span>His opinion : {{ opinionChar }}</span>
+            <span>His opinion on this fact : {{ opinionChar }}</span>
         </div>
         <div class="comment-line" v-html="this.$md.render(body)"></div>
         <span class="comment-line comment-votes-line">
