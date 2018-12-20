@@ -11,7 +11,7 @@
             :permlink="post.permlink"
         />
         <md-progress-bar md-mode="indeterminate" v-if="recuperating"></md-progress-bar>
-        <div v-if="posts.length == 0">There's no fact</div>
+        <div v-if="posts.length == 0 && !recuperating">There's no fact</div>
     </div>
 </template>
 
@@ -49,6 +49,7 @@ export default {
                 client.database
                     .getDiscussions("created", params)
                     .then(result => {
+                        this.recuperating = false;
                         if (result) {
                             // Remove duplicates
                             for (var i = 0; i < result.length; ++i) {
@@ -63,7 +64,6 @@ export default {
 
                             this.posts = this.posts.concat(result);
                         }
-                        this.recuperating = false;
                     })
                     .catch(err => {
                         /* eslint-disable no-console */
