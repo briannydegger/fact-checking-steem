@@ -18,9 +18,12 @@
                     </md-list-item>
 
                     <md-list-item>
-                        <md-icon class="md-primary" md-src="./assets/github.svg"/>
+                        <md-icon class="md-primary" md-src="/github.svg"/>
                         <span class="md-list-item-text">
-                            <a href="https://github.com/briannydegger/fact-checking-steem">GitHub</a>
+                            <a
+                                target="_blank"
+                                href="https://github.com/briannydegger/fact-checking-steem"
+                            >GitHub</a>
                         </span>
                     </md-list-item>
                 </md-list>
