@@ -158,4 +158,8 @@ export default {
     width: 220px;
     max-width: calc(100vw - 125px);
 }
+
+.md-app {
+    max-height: 100vh;
+}
 </style>
