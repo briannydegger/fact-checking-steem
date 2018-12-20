@@ -54,8 +54,10 @@ export default {
                             // Remove duplicates
                             for (var i = 0; i < result.length; ++i) {
                                 for (var j = 0; j < this.posts.length; ++j) {
-                                    if (result[i].id === this.posts[j].id)
+                                    if (result[i].id === this.posts[j].id) {
                                         result.splice(i--, 1);
+                                        break;
+                                    }
                                 }
                             }
                             if (result.length == 0) {
