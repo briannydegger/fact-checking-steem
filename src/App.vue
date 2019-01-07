@@ -47,12 +47,12 @@
                     </md-autocomplete>
 
                     <div v-if="access_token" class="md-toolbar-section-end">
-                        <md-button class="md-icon-button">
-                            <router-link to="/add">
+                        <router-link to="/add">
+                            <md-button class="md-icon-button">
                                 <md-icon>add</md-icon>
-                            </router-link>
-                            <md-tooltip>Add a fact</md-tooltip>
-                        </md-button>
+                                <md-tooltip>Add a fact</md-tooltip>
+                            </md-button>
+                        </router-link>
                         <md-avatar class="md-icon-button">
                             <a
                                 v-if="profile_image"
