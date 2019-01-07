@@ -124,11 +124,9 @@ export default {
             this.waitingLogout = true;
             var that = this;
             this.$apiSteemconnect.revokeToken(function(err, res) {
-                if (res && res.success) {
-                    that.$user.setUsername("");
-                    that.access_token = null;
-                    document.location.href = "/";
-                }
+                that.$user.setUsername("");
+                that.access_token = null;
+                document.location.href = "/";
             });
             return false;
         }
@@ -137,7 +135,11 @@ export default {
         if (this.access_token) {
             let that = this;
             this.$apiSteemconnect.me(function(err, result) {
-                if (!err) {
+                if (err) {
+                    alert(
+                        "An error occurred with your authentication. You should relogin."
+                    );
+                } else {
                     let json_metadata = JSON.parse(
                         result.account.json_metadata
                     );
