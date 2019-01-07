@@ -21,7 +21,7 @@ Vue.use(VueMaterial);
 // init steemconnect
 Vue.prototype.$apiSteemconnect = sc2.Initialize({
     app: "fact-checking",
-    callbackURL: "http://localhost:8080",
+    callbackURL: "https://fact-checking-steem.herokuapp.com/",
     accessToken: "access_token",
     scope: ["vote", "comment", "comment_options"]
 });
