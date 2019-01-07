@@ -33,6 +33,7 @@
                             v-on:change="votingChange"
                         ></voting-line>
                         <vote-line :votes="votes"></vote-line>
+                        <span> | Curators payout : {{ curatorPayout }}</span>
                     </div>
                 </md-card-content>
             </md-card-area>
@@ -115,7 +116,8 @@ export default {
             sending: false,
             comments: [],
             permlink: "",
-            author: ""
+            author: "",
+            curatorPayout: "0.000 SBD"
         };
     },
     validations: {
@@ -253,6 +255,7 @@ export default {
                 this.votes = this.$activeVotesToVotes(result.active_votes);
                 this.permlink = result.permlink;
                 this.author = result.author;
+                this.curatorPayout = result.curator_payout_value;
                 fetchReplies(
                     this.$route.params.author,
                     this.$route.params.permlink
