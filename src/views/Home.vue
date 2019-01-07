@@ -36,7 +36,6 @@ export default {
         fetchFacts() {
             if (!this.recuperating && !this.fetchTouchEnd) {
                 this.recuperating = true;
-                const client = new dsteem.Client("https://api.steemit.com");
                 let params = { tag: "fact-checking-app", limit: 20 };
                 if (this.posts.length > 0) {
                     params.start_author = this.posts[
@@ -46,7 +45,7 @@ export default {
                         this.posts.length - 1
                     ].permlink;
                 }
-                client.database
+                this.$dsteemClient.database
                     .getDiscussions("created", params)
                     .then(result => {
                         this.recuperating = false;
