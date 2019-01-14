@@ -14,6 +14,12 @@
                         <md-icon>info</md-icon>
                         <span class="md-list-item-text" v-on:click="menuVisible = false">
                             <router-link to="/about">About</router-link>
+                            <md-tooltip
+                                v-if="firstVisit"
+                                md-direction="right"
+                                md-active
+                                id="new-here"
+                            >New here ? You can read the user guide on the about page !</md-tooltip>
                         </span>
                     </md-list-item>
 
@@ -99,6 +105,12 @@ export default {
             "username"
         );
         this.$user.setUsername(username);
+
+        let firstVisit = false;
+        if (!localStorage.noFirstVisit) {
+            firstVisit = true;
+            localStorage.noFirstVisit = "1";
+        }
         return {
             filter: "",
             link: this.$apiSteemconnect.getLoginURL(),
@@ -106,7 +118,8 @@ export default {
             username: username,
             usernameDisplay: username,
             profile_image: "",
-            waitingLogout: false
+            waitingLogout: false,
+            firstVisit: firstVisit
         };
     },
     watch: {
@@ -163,5 +176,9 @@ export default {
 
 .md-app {
     max-height: 100vh;
+}
+
+#new-here {
+    margin-left: -100px;
 }
 </style>
