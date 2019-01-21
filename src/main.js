@@ -26,13 +26,14 @@ Vue.prototype.$apiSteemconnect = sc2.Initialize({
     scope: ["vote", "comment", "comment_options"]
 });
 
+// Object contains all votes about a fact
 Vue.prototype.$votesInit = {
-    positiveVote: 0,
-    negativeVote: 0,
-    nullVote: 0,
-    opinions: [],
-    uncertain: false,
-    percent: 100
+    positiveVote: 0, // Counter positive
+    negativeVote: 0, // Counter negative
+    nullVote: 0, // Counter null
+    opinions: [], // List of users who vote, with their vote
+    uncertain: false, // If fact need more vote, or details...
+    percent: 100 // Percent of people who voted think this is true
 };
 Vue.prototype.$activeVotesToVotes = (active_votes) => {
     let votes = {
@@ -71,11 +72,17 @@ Vue.prototype.$activeVotesToVotes = (active_votes) => {
 
     return votes;
 };
+
+// Init variable of dsteem with url of steemit.com
 Vue.prototype.$dsteemClient = new dsteem.Client("https://api.steemit.com");
+
+// Md is use for rendering Markdown
 Vue.prototype.$md = new Remarkable({
     html: true,
     linkify: true
 });
+
+// Class about connected user
 class User {
     constructor() {
         this.username = "";

@@ -17,7 +17,6 @@
 
 <script>
 import Fact from "../components/Fact.vue";
-const dsteem = require("dsteem");
 
 export default {
     name: "home",
@@ -33,10 +32,14 @@ export default {
         fetchTouchEnd: false
     }),
     methods: {
+        // fetchFacts : get 20 fact from Steem
         fetchFacts() {
+            // If he's not already in fetching and already fetched all
             if (!this.recuperating && !this.fetchTouchEnd) {
                 this.recuperating = true;
                 let params = { tag: "fact-checking-app", limit: 20 };
+
+                // Get id of last fact on list
                 if (this.posts.length > 0) {
                     params.start_author = this.posts[
                         this.posts.length - 1
@@ -45,6 +48,8 @@ export default {
                         this.posts.length - 1
                     ].permlink;
                 }
+
+                // Get facts by created
                 this.$dsteemClient.database
                     .getDiscussions("created", params)
                     .then(result => {
@@ -59,6 +64,8 @@ export default {
                                     }
                                 }
                             }
+
+                            // If no news fact : no more fetch
                             if (result.length == 0) {
                                 this.fetchTouchEnd = true;
                             }
@@ -80,6 +87,8 @@ export default {
     },
     mounted: function() {
         this.fetchFacts();
+
+        // When user go to end of page : fetch nex facts
         window.onscroll = () => {
             if (
                 window.innerHeight + window.scrollY + 20 >=

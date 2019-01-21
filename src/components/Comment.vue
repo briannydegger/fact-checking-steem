@@ -143,6 +143,7 @@ export default {
             }
         },
         saveComment() {
+            // Only for connected user
             if (!this.$user.getUsername()) {
                 alert("You have to be logged !");
                 return false;
@@ -150,22 +151,25 @@ export default {
 
             this.sending = true;
             let that = this;
+
             let permlinkComment = Math.random()
                 .toString(36)
                 .substring(2);
 
+            // Send reply
             this.$apiSteemconnect.comment(
-                this.pseudo,
-                this.permlink,
-                this.$user.getUsername(),
-                permlinkComment,
-                "",
-                this.form.contentComment,
-                "",
+                this.pseudo, // Id of comment
+                this.permlink, // Id of comment
+                this.$user.getUsername(), // Id of new reply
+                permlinkComment, // Id of new reply
+                "", // Title
+                this.form.contentComment, // Content
+                "", // Json metadata
                 function(err) {
                     if (err) {
                         alert(err.error_description);
                     } else {
+                        // Get new reply and display it
                         that.$dsteemClient.database
                             .call("get_content", [
                                 that.$user.getUsername(),
@@ -210,6 +214,8 @@ export default {
     },
     mounted: function() {
         let that = this;
+
+        // Get url avatar of user
         this.$dsteemClient.database
             .call("get_accounts", [[this.pseudo]])
             .then(result => {

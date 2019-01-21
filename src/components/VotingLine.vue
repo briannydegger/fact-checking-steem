@@ -52,6 +52,7 @@ export default {
         };
     },
     watch: {
+        // Change opinion
         opinion: function(opinion) {
             if (!this.disabled) {
                 this.vote = opinion;
@@ -72,6 +73,7 @@ export default {
             }
         },
         changeVote: function(voteClicked) {
+            // Only for connected user
             if (!this.$user.getUsername()) {
                 alert("You have to be logged !");
                 return false;
@@ -81,6 +83,11 @@ export default {
             let newVote = this.vote == voteClicked ? -1 : voteClicked;
 
             let that = this;
+            // Send vote
+            // Positif : 10000
+            // Negatif : -0000
+            // Null : 1
+            // No vote : 0 (cancel current vote)
             this.$apiSteemconnect.vote(
                 this.$user.getUsername(),
                 this.author,
@@ -100,6 +107,7 @@ export default {
                         alert(err.error_description);
                     } else {
                         that.vote = newVote;
+                        // Send to component parent new vote
                         that.$emit("change", newState, newVote);
                     }
                     that.disabled = false;

@@ -128,6 +128,7 @@ export default {
         }
     },
     methods: {
+        // During a form validation
         getValidationClass(fieldName) {
             const field = this.$v.form[fieldName];
 
@@ -142,21 +143,22 @@ export default {
                 alert("You have to be logged !");
                 return false;
             }
-
             this.sending = true;
+
             let that = this;
             let permlinkComment = Math.random()
                 .toString(36)
                 .substring(2);
 
+            // Send comment
             this.$apiSteemconnect.comment(
-                this.author,
-                this.permlink,
-                this.$user.getUsername(),
-                permlinkComment,
-                "",
-                this.form.contentComment,
-                "",
+                this.author, // Id parent
+                this.permlink, // Id parent
+                this.$user.getUsername(), // Author : id
+                permlinkComment, // Permlink : id
+                "", // Title
+                this.form.contentComment, // Content
+                "", // Json metadata
                 function(err) {
                     if (err) {
                         alert(err.error_description);
@@ -166,6 +168,7 @@ export default {
                         that.form.contentComment = "";
                         that.reply = false;
 
+                        // Recover new comment and display it
                         that.$dsteemClient.database
                             .call("get_content", [
                                 that.$user.getUsername(),
@@ -179,6 +182,7 @@ export default {
                 }
             );
         },
+        // Validate comment form
         validateComment() {
             this.$v.$touch();
 
@@ -186,6 +190,7 @@ export default {
                 this.saveComment();
             }
         },
+        // Get new vote from actual user on voting-line componnent
         votingChange(newVotesState, newVote) {
             let that = this;
             this.votes.opinions[this.$user.getUsername()] = newVote;
@@ -197,6 +202,7 @@ export default {
     },
     mounted: function() {
         let that = this;
+        // Recursive function use for fetch all comments
         let fetchReplies = function(author, permlink) {
             return that.$dsteemClient.database
                 .call("get_content_replies", [author, permlink])
@@ -216,6 +222,7 @@ export default {
                 });
         };
 
+        // Recursive function use for fetch data about each comment
         let fetchInfos = function(
             comments,
             condenser_api_function,
@@ -243,12 +250,14 @@ export default {
             });
         };
 
+        // Fetch data of the Fact (id in url)
         this.$dsteemClient.database
             .call("get_content", [
                 this.$route.params.author,
                 this.$route.params.permlink
             ])
             .then(result => {
+                // Data of the fact
                 this.content = this.$md.render(result.body);
                 this.title = result.title;
                 this.created = result.created;
@@ -256,17 +265,21 @@ export default {
                 this.permlink = result.permlink;
                 this.author = result.author;
                 this.curatorPayout = result.curator_payout_value;
+
+                // Get all comments, and then, get all data about comments
                 fetchReplies(
                     this.$route.params.author,
                     this.$route.params.permlink
                 ).then(function(comments) {
                     that.comments = comments;
 
+                    // Get votes
                     fetchInfos(
                         that.comments,
                         "get_active_votes",
                         "active_votes"
                     );
+                    // Get payout value
                     fetchInfos(
                         that.comments,
                         "get_content",

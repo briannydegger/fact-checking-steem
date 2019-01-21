@@ -85,6 +85,7 @@ export default {
         }
     },
     methods: {
+        // Used during a form validation
         getValidationClass(fieldName) {
             const field = this.$v.form[fieldName];
 
@@ -101,11 +102,13 @@ export default {
         },
         saveFact() {
             this.sending = true;
+            // Permlink = title in lowercase and any other alphanumeric characters replaced with dash
             this.permlink = this.form.title
                 .toLowerCase()
                 .replace(/[^A-Za-z0-9]+/g, "-");
 
             let that = this;
+            // Send publication and options about this publication
             this.$apiSteemconnect.broadcast(
                 [
                     [
@@ -114,11 +117,11 @@ export default {
                             author: this.$user.getUsername(),
                             body: this.form.content,
                             json_metadata: JSON.stringify({
-                                tags: ["fact-checking-app"],
+                                tags: ["fact-checking-app"], // Only one tag
                                 app: "fact-checking"
                             }),
                             parent_author: "",
-                            parent_permlink: "fact-checking-app",
+                            parent_permlink: "fact-checking-app", // Unique tag
                             permlink: this.permlink,
                             title: this.form.title
                         }
@@ -126,11 +129,11 @@ export default {
                     [
                         "comment_options",
                         {
-                            allow_curation_rewards: true,
+                            allow_curation_rewards: true, // Curators are paid
                             allow_votes: true,
                             author: this.$user.getUsername(),
-                            max_accepted_payout: "0.000 SBD",
-                            percent_steem_dollars: 10000,
+                            max_accepted_payout: "0.000 SBD", // Author is not paid
+                            percent_steem_dollars: 10000, // 100%
                             permlink: this.permlink,
                             extensions: [
                                 [
@@ -166,6 +169,7 @@ export default {
         }
     },
     mounted: function() {
+        // Only for connected user
         if (!this.accessToken) {
             this.$router.push("/");
         }
